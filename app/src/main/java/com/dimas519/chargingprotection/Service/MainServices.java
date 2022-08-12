@@ -4,8 +4,7 @@ package com.dimas519.chargingprotection.Service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
-import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 
 import com.dimas519.chargingprotection.Storage.Storage;
@@ -28,6 +27,8 @@ public class MainServices extends Service implements ServiceInterface {
     private Storage storage;
 
 
+    //Logging purpose
+    private boolean logging=true;
 
 
 
@@ -54,9 +55,9 @@ public class MainServices extends Service implements ServiceInterface {
 
         int sleepTime=((this.minutesSleep*60)+this.secondSleep)*1000;
 
-        Logging.log("Service Created, ip: "+switchPlug.getIP()+", getport: "+switchPlug.getPort()+", waktu phone: "+ Waktu.getTimeNow());
+        logging("Service Created, ip: "+switchPlug.getIP()+", getport: "+switchPlug.getPort()+", waktu phone: "+ Waktu.getTimeNow());
 
-        MainWorker2 worker= new MainWorker2(sleepTime,getBaseContext(),this.switchPlug,this);
+        MainWorkerService worker= new MainWorkerService(sleepTime,this.multiplySleep,getBaseContext(),this.switchPlug,this);
         worker.doMonitor();
     }
 
@@ -68,7 +69,9 @@ public class MainServices extends Service implements ServiceInterface {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Logging.log("Service started, ip: "+switchPlug.getIP()+", getport: "+switchPlug.getPort()+", waktu phone: "+ Waktu.getTimeNow());
+
+
+        logging("Service started, ip: "+switchPlug.getIP()+", getport: "+switchPlug.getPort()+", waktu phone: "+ Waktu.getTimeNow());
         return START_STICKY;
     }
 
@@ -81,7 +84,16 @@ public class MainServices extends Service implements ServiceInterface {
     @Override
     public void error() {
         Notification.showNotification(getBaseContext(),this.id,"Charger Protection","Error 5 times services");
-        Logging.log("Error 5 time| Waktu phone:"+Waktu.getTimeNow());
+        logging("Error 5 time| Waktu phone:"+Waktu.getTimeNow());
         this.onDestroy();
     }
+
+    @Override
+    public void logging(String msg) { //for check logging features enabled /disabled
+        if(this.logging){
+            Logging.log(msg);
+        }
+    }
+
+
 }

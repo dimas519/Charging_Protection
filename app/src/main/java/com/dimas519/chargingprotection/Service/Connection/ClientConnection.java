@@ -20,7 +20,7 @@ public class ClientConnection {
         try {
             this.IPAddress=InetAddress.getByName(IPAddress);
             this.clientSocket=new DatagramSocket();
-            this.clientSocket.setSoTimeout(10000); // 5detik
+            this.clientSocket.setSoTimeout(5000); // 5detik
         } catch (SocketException e) {
 
         } catch (UnknownHostException e) {

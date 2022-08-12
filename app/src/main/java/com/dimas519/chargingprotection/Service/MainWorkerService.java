@@ -11,10 +11,10 @@ import com.dimas519.chargingprotection.Tools.BatteryStatus;
 import com.dimas519.chargingprotection.Tools.Notification;
 import com.dimas519.chargingprotection.Tools.Waktu;
 
-public class MainWorker2 {
+public class MainWorkerService {
     private final String id="CP2";
-    private  int sleepTime;
-
+    private  int sleepTimeCharging;
+    private int sleepTimeNotCharing;
 
 
     private Context context;
@@ -22,15 +22,16 @@ public class MainWorker2 {
     private Intent battery;
 
 
-
     private SwitchCharger switchCharger;
     private ServiceInterface si;
 
 
     private int error;
+    private int levelCharge=100;
 
-    public MainWorker2(int sleepTime,Context context,SwitchCharger switchCharger,ServiceInterface si){
-        this.sleepTime=sleepTime;
+    public MainWorkerService(int sleepTime, int multiply, Context context, SwitchCharger switchCharger, ServiceInterface si){
+        this.sleepTimeCharging=sleepTime;
+        this.sleepTimeNotCharing=sleepTime*multiply;
         this.context=context;
         this.ifilter=new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         this.switchCharger=switchCharger;
@@ -61,33 +62,32 @@ public class MainWorker2 {
 
 
                     if (isCharging ||isFull){
-                        if (level == 100) {
 
-                            sleeping(2*60*1000);
+
+
+                        if (level == levelCharge) { //level charge
 
                             boolean result=switchCharger.turn_off();
-
-
-                            Logging.log(BatteryStatus.getStatus(status)+"level:100, result: "+result+", waktu phone: "+ Waktu.getTimeNow() +
+                            si.logging(BatteryStatus.getStatus(status)+"level:100, result: "+result+", waktu phone: "+ Waktu.getTimeNow() +
                                     ", ip: "+switchCharger.getIP()+", getport: "+switchCharger.getPort());
                             if(!result){
                                error();
                             }
 
 
-                            sleeping(sleepTime);
+                            sleeping(sleepTimeCharging);
 
-                        } else {
-                            String message ="state:"+ BatteryStatus.getStatus(status) +", level:"+level+", waktu phone: "+Waktu.getTimeNow()+
-                                    ", ip: "+switchCharger.getIP()+", getport: "+switchCharger.getPort();
-                            Logging.log(message);
-
-                            sleeping(sleepTime);
+                        } else { //not enough percentage
+                            si.logging("state:"+ BatteryStatus.getStatus(status) +", level:"+level+", waktu phone: "+Waktu.getTimeNow()+
+                                    ", ip: "+switchCharger.getIP()+", getport: "+switchCharger.getPort());
+                            sleeping(sleepTimeCharging);
                         }
-                    } else {
-                        Logging.log("not Charging "+level+", waktu phone: "+ Waktu.getTimeNow()+
+
+
+                    } else { //not charge
+                        si.logging("not Charging "+level+", waktu phone: "+ Waktu.getTimeNow()+
                                 ", ip: "+switchCharger.getIP()+", getport: "+switchCharger.getPort());
-                        sleeping(sleepTime);
+                        sleeping(sleepTimeNotCharing);
                     }
 
 
@@ -113,7 +113,5 @@ public class MainWorker2 {
             e.printStackTrace();
         }
     }
-
-
 
 }
