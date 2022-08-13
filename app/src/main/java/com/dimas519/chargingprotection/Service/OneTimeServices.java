@@ -1,15 +1,12 @@
 package com.dimas519.chargingprotection.Service;
 
 import android.content.Context;
-
-
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
-
-
 import com.dimas519.chargingprotection.Storage.Storage;
 import com.dimas519.chargingprotection.SwitchCharger;
 
@@ -59,7 +56,6 @@ public class OneTimeServices extends Worker {
 
             int res=hasil?
                 conditionToggle?0:1 :-1;
-
 
             Data output = new Data.Builder()
                     .putInt("hasil", res)

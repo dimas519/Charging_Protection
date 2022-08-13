@@ -44,6 +44,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         this.wm= WorkManager.getInstance(getContext());
         this.storage=new Storage(getContext());
 
@@ -114,8 +115,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             String ip=this.binding.ipAdress.getText().toString();
             String port=this.binding.port.getText().toString();
             this.setDeviceInfo(ip,port);
-            getActivity().finish();
-            startActivity(getActivity().getIntent());
+            this.initCheckSwitchStatus();
 
         }
     }
@@ -150,6 +150,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 int res=x.getInt("hasil", 2);
                 if(res==-1){
                     Toast.makeText(getContext(), "TIMEOUT", Toast.LENGTH_SHORT).show();
+                    binding.switch3.setChecked(false);
                 }else if(res==0){
                     binding.switch3.setChecked(false);
                 }else if(res==1){
@@ -179,6 +180,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     private void setDeviceInfo(String ip,String port){
         this.setDeviceInfo(ip,Integer.parseInt(port));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.initCheckSwitchStatus();
     }
 
 

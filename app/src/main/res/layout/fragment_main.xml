@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainFragment">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
 
         <EditText
@@ -18,8 +14,10 @@
             android:layout_above="@+id/port"
             android:layout_marginBottom="50dp"
             android:ems="10"
-            android:text="192.168.100.17"
-            android:textAlignment="center" />
+            android:hint="@string/etIP"
+            android:textAlignment="center"
+            android:inputType="text"
+            tools:ignore="Autofill"/>
 
         <EditText
             android:layout_centerVertical="true"
@@ -28,8 +26,10 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:ems="10"
-            android:text="38899"
-            android:textAlignment="center" />
+            android:hint="@string/etPort"
+            android:textAlignment="center"
+            android:inputType="number"
+            tools:ignore="Autofill" />
 
         <Button
             android:id="@+id/save"
@@ -42,29 +42,28 @@
             android:text="@string/save" />
 
 
-        <Switch
+        <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switch3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/save"
             android:layout_centerHorizontal="true"
-            android:text="Switch Status" />
+            android:text="@string/condSwitch"/>
 
 
-        <Switch
+        <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/service"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/switch3"
             android:layout_centerHorizontal="true"
-
-            android:text="Service Status Status" />
+            android:text="@string/condService" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/service"
-            android:layout_toLeftOf="@id/mid"
+            android:layout_toStartOf="@id/mid"
             android:text="@string/state" />
 
 
@@ -74,17 +73,17 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/service"
             android:layout_centerHorizontal="true"
-            android:text=" : " />
+            android:text="@string/titikDua"/>
 
         <TextView
             android:id="@+id/state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/service"
-            android:layout_toRightOf="@id/mid"
-            android:text="Condition"
+            android:layout_toStartOf="@id/mid"
+
 
             />
 
-    </RelativeLayout>
-</FrameLayout>
+
+</RelativeLayout>

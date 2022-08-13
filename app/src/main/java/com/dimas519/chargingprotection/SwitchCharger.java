@@ -1,12 +1,8 @@
 package com.dimas519.chargingprotection;
 
 
-
-
-
 import com.dimas519.chargingprotection.Service.Connection.ClientConnection;
 import com.google.gson.Gson;
-
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.Map;
@@ -15,7 +11,7 @@ public class SwitchCharger {
     private ClientConnection con;
     private String ip;
     private int port;
-    public static String mac="6c2990a99373";
+    //public static String mac="6c2990a99373";
 
     public SwitchCharger(String ip, int port) {
         this.ip=ip;
@@ -44,6 +40,7 @@ public class SwitchCharger {
         } catch (IOException e) {
             return false;
         } catch (Exception e) {
+
             return false;
         }
 

@@ -2,8 +2,18 @@
     <string name="app_name">Charging Protection</string>
     <string name="state">State</string>
     <string name="save">Save !!!</string>
-    
+    <string name="etIP">Enter IP Address</string>
+    <string name="etPort">Enter Port</string>
+    <string name="condSwitch">Switch Status</string>
+    <string name="condService">Service Status</string>
+    <string name="condition">Condition</string>
+    <string name="titikDua"> : </string>
+    <string name="titleWidget"> Toogle Switch</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
 
 
 </resources>

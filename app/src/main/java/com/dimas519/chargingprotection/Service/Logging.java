@@ -1,9 +1,5 @@
 package com.dimas519.chargingprotection.Service;
 
-
-
-import android.util.Log;
-
 import com.dimas519.chargingprotection.Service.Connection.ClientConnection;
 
 
@@ -21,9 +17,7 @@ public class Logging {
                 try {
                     con.sendToServer(msg);
                 }catch (SocketTimeoutException e){
-                    Log.d("konci2", "run: to");
                 }catch (IOException e){
-                    Log.d("konci2", "run: IOE");
                 }catch (Exception e){
                     
                 }

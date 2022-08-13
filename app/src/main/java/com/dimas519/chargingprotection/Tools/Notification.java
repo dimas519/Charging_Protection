@@ -5,12 +5,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-
 import androidx.core.app.NotificationCompat;
-
 import com.dimas519.chargingprotection.MainActivity;
 import com.dimas519.chargingprotection.R;
-
 import java.util.ArrayList;
 
 public class Notification {

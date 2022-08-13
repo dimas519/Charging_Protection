@@ -35,13 +35,13 @@ public class Storage {
         return sp.getInt(this.port,38899);
     }
 
-    public void setStatus(boolean status){
+    public void setLoggingStatus(boolean status){
         SharedPreferences.Editor editor= this.sp.edit();
         editor.putBoolean(this.status,status);
         editor.apply();
     }
 
-    public boolean getStatus(){
+    public boolean getLoggingStatus(){
         return sp.getBoolean(this.status,false);
     }
 

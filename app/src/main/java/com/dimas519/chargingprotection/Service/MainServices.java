@@ -1,12 +1,10 @@
 package com.dimas519.chargingprotection.Service;
 
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-
+import android.widget.Toast;
 import androidx.annotation.Nullable;
-
 import com.dimas519.chargingprotection.Storage.Storage;
 import com.dimas519.chargingprotection.SwitchCharger;
 import com.dimas519.chargingprotection.Tools.Notification;
@@ -46,6 +44,7 @@ public class MainServices extends Service implements ServiceInterface {
 
     @Override
     public void onCreate(){
+        Toast.makeText(this, "Click Services", Toast.LENGTH_SHORT).show();
         if(this.storage==null) {
             this.storage = new Storage(getApplicationContext());
         }

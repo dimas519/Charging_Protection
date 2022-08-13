@@ -4,11 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
-
-
 import com.dimas519.chargingprotection.SwitchCharger;
 import com.dimas519.chargingprotection.Tools.BatteryStatus;
-import com.dimas519.chargingprotection.Tools.Notification;
 import com.dimas519.chargingprotection.Tools.Waktu;
 
 public class MainWorkerService {

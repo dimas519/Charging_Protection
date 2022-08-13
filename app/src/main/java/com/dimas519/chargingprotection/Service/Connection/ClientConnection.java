@@ -1,10 +1,5 @@
 package com.dimas519.chargingprotection.Service.Connection;
 
-
-
-
-import android.widget.Toast;
-
 import java.io.IOException;
 import java.net.*;
 

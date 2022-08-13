@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.dimas519.chargingprotection.MainActivity;
-
 
 public class BroadcastReceiverSwitch  extends BroadcastReceiver {
 
