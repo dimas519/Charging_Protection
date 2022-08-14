@@ -7,6 +7,8 @@ import android.os.BatteryManager;
 import com.dimas519.chargingprotection.SwitchCharger;
 import com.dimas519.chargingprotection.Tools.BatteryStatus;
 import com.dimas519.chargingprotection.Tools.Waktu;
+import com.dimas519.chargingprotection.Widget.WidgetCode;
+import com.dimas519.chargingprotection.Widget.Widget_Charging_Protection;
 
 public class MainWorkerService {
     private final String id="CP2";
@@ -40,7 +42,13 @@ public class MainWorkerService {
         this.error++;
         if(error==5){
             this.si.error();
+            Intent intent = new Intent(context, Widget_Charging_Protection.class);
+            intent.setAction(WidgetCode.ChangeStatus);
+            intent.putExtra("status", WidgetCode.ERROR);
+            context.sendBroadcast(intent);
         }
+
+
     }
 
     public void doMonitor(){
@@ -69,6 +77,11 @@ public class MainWorkerService {
                                     ", ip: "+switchCharger.getIP()+", getport: "+switchCharger.getPort());
                             if(!result){
                                error();
+                            }else{
+                                Intent intent = new Intent(context, Widget_Charging_Protection.class);
+                                intent.setAction(WidgetCode.ChangeStatus);
+                                intent.putExtra("status", WidgetCode.OFF);
+                                context.sendBroadcast(intent);
                             }
 
 

@@ -1,7 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/Widget.ChargingProtection.AppWidget.Container"
-    android:id="@+id/widget_button"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="0dp"
@@ -17,13 +15,11 @@
 
 
         <ImageButton
-            android:id="@+id/widget_Image"
-
+            android:id="@+id/widget_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:background="#00000000"
-
             android:padding="8dp"
             android:src="@mipmap/battery_logo_round" />
 
@@ -31,7 +27,7 @@
                 android:id="@+id/tvWidget"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/widget_Image"
+                android:layout_below="@+id/widget_button"
                 android:textAlignment="center"
 
                 android:text="@string/titleWidget"

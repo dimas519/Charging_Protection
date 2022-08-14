@@ -1,54 +1,28 @@
 package com.dimas519.chargingprotection.Widget;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.os.StrictMode;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
-
-import androidx.activity.result.ActivityResultLauncher;
-
 import com.dimas519.chargingprotection.R;
 import com.dimas519.chargingprotection.Storage.Storage;
 import com.dimas519.chargingprotection.SwitchCharger;
-import com.dimas519.chargingprotection.databinding.WidgetChargingProtectionBinding;
+import com.dimas519.chargingprotection.Widget.Thread.OwnHandler;
+import com.dimas519.chargingprotection.Widget.Thread.WidgetThread;
 
 
-public class Widget_Charging_Protection extends AppWidgetProvider {
-
-    private final String ACTION_UPDATE_CLICK_NEXT = "action.UPDATE_CLICK_NEXT";
-
+public class Widget_Charging_Protection extends AppWidgetProvider implements WidgetInterface {
 
 
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-
-        Intent intent=new Intent(context,this.getClass());
-        intent.setAction("ToggleBattery");
-        intent.putExtra("ids_size",appWidgetIds.length);
-
-        for (int counter=0; counter<appWidgetIds.length;counter++) {
-            intent.putExtra("ids"+counter+1,appWidgetIds[counter]);
-        }
-
-        PendingIntent pendingIntent =PendingIntent.getBroadcast(context,1,intent,0);
-
-
-
-
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget__charging__protection);
-        remoteViews.setOnClickPendingIntent(R.id.widget_Image,pendingIntent);
 
-
-
-
-        remoteViews.setCharSequence(R.id.tvWidget, "setText", "newText");
         for (int appWidgetId : appWidgetIds) {
             appWidgetManager.updateAppWidget(appWidgetId,remoteViews);
         }
@@ -62,68 +36,85 @@ public class Widget_Charging_Protection extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        super.onReceive(context, intent);
+        String action=intent.getAction();
+        if(action.equals(WidgetCode.ChangeStatus)){
+            int status=intent.getIntExtra("status",-1);
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitNetwork().build();
-        StrictMode.setThreadPolicy(policy);
-
-
-        if(intent.getAction().equals("ToggleBattery")) {
-            int idsSizes = intent.getIntExtra("ids_size",0);
-            int ids[]=new int[idsSizes];
-
-            for(int i=0;i<idsSizes;i++){
-                ids[i]=intent.getIntExtra("ids"+i+1,0);
-            }
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget__charging__protection);
-
-            Storage x=new Storage(context);
-            SwitchCharger switchCharger=new SwitchCharger(x.getIP(),x.getPort());
-
-            int currentState =  switchCharger.getstatus();
-
-
-
-
-            boolean res;
-        if(currentState==-1){
-            Toast.makeText(context, "Switch Error", Toast.LENGTH_SHORT).show();
-        }else if(currentState==1){
-            res=switchCharger.turn_off();
-
-            if(res){
-                Toast.makeText(context, "Switch Turned Off", Toast.LENGTH_SHORT).show();
-                remoteViews.setTextViewText(R.id.tvWidget, "Turn On");
-
-            }else{
-                Toast.makeText(context, "Switch To Failed Turn Off", Toast.LENGTH_SHORT).show();
-                remoteViews.setTextViewText(R.id.tvWidget, "Error");
+            if(status==WidgetCode.ON) {
+                responseFromThread(context, WidgetCode.SuccessTurnOn);
+            }else if(status==WidgetCode.OFF){
+                responseFromThread(context, WidgetCode.SuccessTurnOff);
+            }else if(status==WidgetCode.ERROR){
+                responseFromThread(context, WidgetCode.SwitchError);
             }
 
 
         }else{
-            res=switchCharger.turn_on();
-            if(res){
-                Toast.makeText(context, "Switch Turned On", Toast.LENGTH_SHORT).show();
-                remoteViews.setTextViewText(R.id.tvWidget, "Turn Off");
+            Storage x=new Storage(context);
+            SwitchCharger switchCharger=new SwitchCharger(x.getIP(),x.getPort());
 
-            }else{
-                Toast.makeText(context, "Switch To Failed Turn On", Toast.LENGTH_SHORT).show();
-                remoteViews.setTextViewText(R.id.tvWidget, "Error");
+            OwnHandler ownHandler =new OwnHandler(context,this);
+            WidgetThread widgetThread=new WidgetThread(ownHandler, switchCharger);
+            if(action.equals(WidgetCode.ToggleAction)) {
+                widgetThread.setAction(WidgetCode.ToggleAction);;
             }
+            Thread otherThread=new Thread(widgetThread);
+            otherThread.start();
         }
 
 
-
-
-
-            for (int appWidgetId : ids ){
-                AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId,remoteViews);
-            }
-        }
     }
 
 
+    @Override
+    public void responseFromThread(Context context, int result) {
 
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget__charging__protection);
+
+        if(result==WidgetCode.SuccessTurnOn){
+            remoteViews.setTextViewText(R.id.tvWidget, "Turn Off");
+            remoteViews.setInt(R.id.widget_button, "setImageResource",R.mipmap.battery_logo_round);
+            Toast.makeText(context, "Success Turn On", Toast.LENGTH_SHORT).show();
+        }else if(result==WidgetCode.SuccessTurnOff){
+            remoteViews.setTextViewText(R.id.tvWidget, "Turn On");
+            remoteViews.setInt(R.id.widget_button, "setImageResource",R.mipmap.battery_logo_off_round);
+            Toast.makeText(context, "Success Turn Off", Toast.LENGTH_SHORT).show();
+        }else if(result==WidgetCode.FailedTurnOff){
+            remoteViews.setTextViewText(R.id.tvWidget, "Turn Off");
+            remoteViews.setInt(R.id.widget_button, "setImageResource",R.mipmap.battery_logo_off_round);
+            Toast.makeText(context, "Failed Turn Off", Toast.LENGTH_SHORT).show();
+        }else if(result==WidgetCode.FailedTurnOn){
+            remoteViews.setTextViewText(R.id.tvWidget, "Turn On Error");
+            remoteViews.setInt(R.id.widget_button, "setImageResource",R.mipmap.battery_logo_round);
+            Toast.makeText(context, "Failed Turn On", Toast.LENGTH_SHORT).show();
+        }else if(result==WidgetCode.SwitchError){
+            remoteViews.setTextViewText(R.id.tvWidget, "Status Error");
+            Toast.makeText(context, "Status Error", Toast.LENGTH_SHORT).show();
+        }else if(result==WidgetCode.ON){
+            remoteViews.setTextViewText(R.id.tvWidget, "Turn Off");
+            remoteViews.setInt(R.id.widget_button, "setImageResource",R.mipmap.battery_logo_round);
+
+        }else if(result==WidgetCode.OFF){
+            remoteViews.setTextViewText(R.id.tvWidget, "Turn On");
+            remoteViews.setInt(R.id.widget_button, "setImageResource",R.mipmap.battery_logo_off_round);
+        }
+
+
+
+        Intent intent=new Intent(context,this.getClass());
+        intent.setAction(WidgetCode.ToggleAction);
+        PendingIntent pendingIntent =PendingIntent.getBroadcast(context,1,intent,0);
+
+        remoteViews.setOnClickPendingIntent(R.id.widget_button,pendingIntent);
+
+
+
+        int[] appWidgetIds= AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context.getPackageName(), this.getClass().getName()));
+        for (int appWidgetId : appWidgetIds) {
+            AppWidgetManager.getInstance(context).updateAppWidget(appWidgetId, remoteViews);
+        }
+
+
+    }
 
 }

@@ -1,8 +1,6 @@
 package com.dimas519.chargingprotection.Service;
 
 import com.dimas519.chargingprotection.Service.Connection.ClientConnection;
-
-
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 

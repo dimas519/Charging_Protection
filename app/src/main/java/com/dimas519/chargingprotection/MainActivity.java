@@ -4,12 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
-
 import com.dimas519.chargingprotection.databinding.ActivityMainBinding;
 import java.util.ArrayList;
 
@@ -40,15 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
-
-
-
-
-
-
-
-
-
         //init-int
         this.binding =ActivityMainBinding.inflate(getLayoutInflater());
         this.fm=getSupportFragmentManager();
@@ -66,10 +55,6 @@ public class MainActivity extends AppCompatActivity {
 //        ft=fm.beginTransaction();
 //        fm.setFragmentResultListener("sebelum",this,this);
 
-
-
-
-
         setContentView(binding.getRoot());
     }
 
@@ -82,19 +67,6 @@ public class MainActivity extends AppCompatActivity {
         }
         ft.commit();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

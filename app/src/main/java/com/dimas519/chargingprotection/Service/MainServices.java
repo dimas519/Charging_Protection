@@ -9,6 +9,8 @@ import com.dimas519.chargingprotection.Storage.Storage;
 import com.dimas519.chargingprotection.SwitchCharger;
 import com.dimas519.chargingprotection.Tools.Notification;
 import com.dimas519.chargingprotection.Tools.Waktu;
+import com.dimas519.chargingprotection.Widget.WidgetCode;
+import com.dimas519.chargingprotection.Widget.Widget_Charging_Protection;
 
 
 public class MainServices extends Service implements ServiceInterface {

@@ -1,13 +1,11 @@
 package com.dimas519.chargingprotection;
 
 import static android.content.Context.ACTIVITY_SERVICE;
-
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -15,16 +13,16 @@ import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.dimas519.chargingprotection.Service.MainServices;
 import com.dimas519.chargingprotection.Service.OneTimeServices;
 import com.dimas519.chargingprotection.Storage.Storage;
 import com.dimas519.chargingprotection.Tools.BatteryStatus;
+import com.dimas519.chargingprotection.Widget.WidgetCode;
+import com.dimas519.chargingprotection.Widget.Widget_Charging_Protection;
 import com.dimas519.chargingprotection.databinding.FragmentMainBinding;
 
 import java.util.UUID;
@@ -97,7 +95,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     .putBoolean("status",!status)
                     .build();
             UUID idTask=this.addWork(data);
-            this.observeSwitchCondifition(idTask);
+            this.observeSwitchCondifition(idTask,true);
 
 
 
@@ -140,6 +138,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
     private void observeSwitchCondifition(UUID idTask){
+        this.observeSwitchCondifition(idTask,false);
+    }
+
+    private void observeSwitchCondifition(UUID idTask, boolean updateWidget){
 
         LiveData x=this.wm.getWorkInfoByIdLiveData(idTask);
         x.observe(getViewLifecycleOwner(), new Observer<WorkInfo>() {
@@ -148,13 +150,21 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 Data x=o.getOutputData();
 
                 int res=x.getInt("hasil", 2);
-                if(res==-1){
+                if(res==WidgetCode.ERROR){
                     Toast.makeText(getContext(), "TIMEOUT", Toast.LENGTH_SHORT).show();
                     binding.switch3.setChecked(false);
-                }else if(res==0){
+                }else if(res==WidgetCode.OFF){
                     binding.switch3.setChecked(false);
-                }else if(res==1){
+
+                }else if(res==WidgetCode.ON){
                     binding.switch3.setChecked(true);
+                }
+
+                if(updateWidget) {
+                    Intent intent = new Intent(getContext(), Widget_Charging_Protection.class);
+                    intent.setAction(WidgetCode.ChangeStatus);
+                    intent.putExtra("status", res);
+                    getContext().sendBroadcast(intent);
                 }
 
             }
