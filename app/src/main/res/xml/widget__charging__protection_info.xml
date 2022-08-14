@@ -3,7 +3,7 @@
     android:description="@string/app_widget_description"
     android:initialKeyguardLayout="@layout/widget__charging__protection"
     android:initialLayout="@layout/widget__charging__protection"
-    android:previewImage="@drawable/example_appwidget_preview"
+    android:previewImage="@mipmap/battery_logo_off_white_round"
 
     android:previewLayout="@layout/widget__charging__protection"
     android:targetCellWidth="1"
