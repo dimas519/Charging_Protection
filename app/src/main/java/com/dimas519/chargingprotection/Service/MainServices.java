@@ -46,7 +46,6 @@ public class MainServices extends Service implements ServiceInterface {
 
     @Override
     public void onCreate(){
-        Toast.makeText(this, "Click Services", Toast.LENGTH_SHORT).show();
         if(this.storage==null) {
             this.storage = new Storage(getApplicationContext());
         }

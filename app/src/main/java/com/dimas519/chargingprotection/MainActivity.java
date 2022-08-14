@@ -1,20 +1,27 @@
 package com.dimas519.chargingprotection;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.Toast;
 import com.dimas519.chargingprotection.databinding.ActivityMainBinding;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityMainBinding binding;
     private FragmentManager fm;
     private FragmentTransaction ft;
+
+
+
 
 
 
@@ -23,19 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        int temp=data.getIntExtra("hasil",9);
-        Toast.makeText(getApplicationContext(), "Switch Turned On"+temp, Toast.LENGTH_SHORT).show();
-        Log.d("koncisss", "onActivityResult: "+temp);
-
-    }
-
-
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
 
         //init-int
@@ -43,14 +38,23 @@ public class MainActivity extends AppCompatActivity {
         this.fm=getSupportFragmentManager();
 
 
-
         //init fragment
         this.fragments=new ArrayList<>();
         this.fragments.add(new MainFragment(0));
 
-
         //set fragments awal
         this.changePage(0);
+
+        //set up drawer dan onclicknya
+
+        this.binding.drawerButton.setOnClickListener(this);
+
+
+
+
+
+
+
 
 //        ft=fm.beginTransaction();
 //        fm.setFragmentResultListener("sebelum",this,this);
@@ -63,10 +67,16 @@ public class MainActivity extends AppCompatActivity {
     public void changePage(int page){
         this.ft=fm.beginTransaction();
         if(page==0){
-            this.ft.add(this.binding.fragments.getId(),fragments.get(0),null);
+            this.ft.add(this.binding.fragment.getId(),fragments.get(0),null);
         }
         ft.commit();
     }
 
 
+    @Override
+    public void onClick(View view) {
+        if(view==this.binding.drawerButton){
+            this.binding.drawerLayout.openDrawer(Gravity.LEFT);
+        }
+    }
 }
