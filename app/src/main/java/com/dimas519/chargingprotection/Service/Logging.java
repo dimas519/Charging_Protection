@@ -7,11 +7,11 @@ import java.net.SocketTimeoutException;
 
 public class Logging {
 
-    public static void log(String msg) {
+    public static void log(String msg,String ip,int port) {
         Thread log=new Thread(new Runnable() {
             @Override
             public void run() {
-                ClientConnection con = new ClientConnection("192.168.100.100",9161);
+                ClientConnection con = new ClientConnection(ip,port);
                 try {
                     con.sendToServer(msg);
                 }catch (SocketTimeoutException e){

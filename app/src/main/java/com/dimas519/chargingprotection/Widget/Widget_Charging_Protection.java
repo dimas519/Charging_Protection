@@ -51,7 +51,7 @@ public class Widget_Charging_Protection extends AppWidgetProvider implements Wid
 
         }else{
             Storage x=new Storage(context);
-            SwitchCharger switchCharger=new SwitchCharger(x.getIP(),x.getPort());
+            SwitchCharger switchCharger=new SwitchCharger(x.getIP(),x.getSwitchPort());
 
             OwnHandler ownHandler =new OwnHandler(context,this);
             WidgetThread widgetThread=new WidgetThread(ownHandler, switchCharger);

@@ -4,6 +4,9 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import androidx.annotation.Nullable;
+
+import com.dimas519.chargingprotection.LoggingFragment;
+import com.dimas519.chargingprotection.Presenter.LoggingPresenter;
 import com.dimas519.chargingprotection.Storage.Storage;
 import com.dimas519.chargingprotection.SwitchCharger;
 import com.dimas519.chargingprotection.Tools.Notification;
@@ -21,11 +24,15 @@ public class MainServices extends Service implements ServiceInterface {
 
     //needed
     private SwitchCharger switchPlug;
-    private Storage storage;
+    private Storage storage; //need presenter
+
+    //setUpLogging
+    private String ip;
+    private int port=-1;
 
 
     //Logging purpose
-    private boolean logging=true;
+    private boolean logging=false;
 
 
 
@@ -48,8 +55,15 @@ public class MainServices extends Service implements ServiceInterface {
             this.storage = new Storage(getApplicationContext());
         }
 
+        if(ip==null || port==-1){
+            LoggingPresenter presenter=new LoggingPresenter(getApplicationContext());
+            this.ip=presenter.getIP();
+            this.port=presenter.getPort();
+            this.logging=presenter.getStatus();
+        }
+
         if(switchPlug==null) {
-            this.switchPlug = new SwitchCharger(this.storage.getIP(), this.storage.getPort());
+            this.switchPlug = new SwitchCharger(this.storage.getIP(), this.storage.getSwitchPort());
         }
 
         int sleepTime=((this.minutesSleep*60)+this.secondSleep)*1000;
@@ -90,7 +104,7 @@ public class MainServices extends Service implements ServiceInterface {
     @Override
     public void logging(String msg) { //for check logging features enabled /disabled
         if(this.logging){
-            Logging.log(msg);
+            Logging.log(msg,ip,port);
         }
     }
 

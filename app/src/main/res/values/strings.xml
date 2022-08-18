@@ -9,9 +9,16 @@
     <string name="condition">Condition</string>
     <string name="titikDua"> : </string>
     <string name="titleWidget"> Toogle Switch</string>
+    <string name="titleLogging">Logging Setup Page</string>
+    <string name="switchLog">Logging Status</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="appwidget_text">EXAMPLE</string>
+
+    <string name="navHome">Home</string>
+    <string name="navLogging">Logging Menu</string>
+    <string name="navWifi">Wifi Configuration</string>
+    <string name="navAbout">About</string>
+
+
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">This is an app widget description</string>
 

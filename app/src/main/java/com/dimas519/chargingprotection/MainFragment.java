@@ -69,7 +69,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         //setup text
         this.binding.ipAdress.setText(this.storage.getIP());
-        this.binding.port.setText(this.storage.getPort()+"");
+        this.binding.port.setText(this.storage.getSwitchPort()+"");
 
 
 
@@ -184,7 +184,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         this.binding.ipAdress.setText(ip);
         this.binding.port.setText(port+"");
 
-        this.storage.setPort(port);
+        this.storage.saveSwitchPort(port);
         this.storage.saveIP(ip);
     }
 

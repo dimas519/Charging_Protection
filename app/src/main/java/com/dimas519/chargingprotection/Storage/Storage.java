@@ -6,10 +6,18 @@ import android.preference.PreferenceManager;
 
 public class Storage {
     private SharedPreferences sp;
-    private final String address="ip";
-    private final String port="port";
+
+    //switch
+    private final String switchAddress ="ip";
+    private final String switchPort ="port";
     private final String mac="mac";
-    private final String status="status";
+
+
+    //logging
+    private final String loggingAddress ="Logging_ip";
+    private final String loggingPort ="Logging_port";
+    private final String loggingStatus="Logging_status";
+
 
     public Storage(Context c){
         this. sp= PreferenceManager.getDefaultSharedPreferences(c);
@@ -17,32 +25,57 @@ public class Storage {
 
     public void saveIP(String ip){
         SharedPreferences.Editor editor= this.sp.edit();
-        editor.putString(this.address,ip);
+        editor.putString(this.switchAddress,ip);
         editor.apply();
     }
 
     public String getIP(){
-        return sp.getString(this.address,"192.168.100.17");
+        return sp.getString(this.switchAddress,"192.168.100.17");
     }
 
-    public void setPort(int port){
+    public void saveSwitchPort(int switchPort){
         SharedPreferences.Editor editor= this.sp.edit();
-        editor.putInt(this.port,port);
+        editor.putInt(this.switchPort, switchPort);
         editor.apply();
     }
 
-    public int getPort(){
-        return sp.getInt(this.port,38899);
+    public int getSwitchPort(){
+        return sp.getInt(this.switchPort,38899);
     }
 
-    public void setLoggingStatus(boolean status){
+    // ---------------------------------------------------------------------
+    // LOGGING
+    //----------------------------------------------------------------------
+
+    public void saveIPLogging(String ip){
         SharedPreferences.Editor editor= this.sp.edit();
-        editor.putBoolean(this.status,status);
+        editor.putString(this.loggingAddress,ip);
+        editor.apply();
+    }
+
+    public String getIPLogging(){
+        return sp.getString(this.loggingAddress,"192.168.100.100");
+    }
+
+    public void savePortLogging(int switchPort){
+        SharedPreferences.Editor editor= this.sp.edit();
+        editor.putInt(this.loggingPort, switchPort);
+        editor.apply();
+    }
+
+    public int getPortLogging() {
+        return sp.getInt(this.loggingPort, 9161);
+    }
+
+
+    public void saveLoggingStatus(boolean status){
+        SharedPreferences.Editor editor= this.sp.edit();
+        editor.putBoolean(this.loggingStatus,status);
         editor.apply();
     }
 
     public boolean getLoggingStatus(){
-        return sp.getBoolean(this.status,false);
+        return sp.getBoolean(this.loggingStatus,false);
     }
 
 

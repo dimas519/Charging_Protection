@@ -29,7 +29,7 @@ public class OneTimeServices extends Worker {
         Storage storage=new Storage(context);
 
 
-        this.switchCharger=new SwitchCharger(storage.getIP(),storage.getPort());
+        this.switchCharger=new SwitchCharger(storage.getIP(),storage.getSwitchPort());
     }
 
     @NonNull
