@@ -1,6 +1,8 @@
 package com.dimas519.chargingprotection.Service;
 
 public interface ServiceInterface {
-    public void error();
-    public void logging(String msg);
+    void error();
+    void logging(String msg);
+    boolean wifiStatus(String ssid,String ipAddress);
+
 }

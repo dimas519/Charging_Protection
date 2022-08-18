@@ -1,8 +1,6 @@
 package com.dimas519.chargingprotection.Service;
 
 import android.content.Context;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.Worker;

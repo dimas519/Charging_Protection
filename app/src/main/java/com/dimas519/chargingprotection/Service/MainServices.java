@@ -3,15 +3,12 @@ package com.dimas519.chargingprotection.Service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.widget.Toast;
 import androidx.annotation.Nullable;
 import com.dimas519.chargingprotection.Storage.Storage;
 import com.dimas519.chargingprotection.SwitchCharger;
 import com.dimas519.chargingprotection.Tools.Notification;
 import com.dimas519.chargingprotection.Tools.Waktu;
-import com.dimas519.chargingprotection.Widget.WidgetCode;
-import com.dimas519.chargingprotection.Widget.Widget_Charging_Protection;
-
+import com.dimas519.chargingprotection.Tools.WifiChecker;
 
 public class MainServices extends Service implements ServiceInterface {
     private final static String id="CP1";
@@ -46,9 +43,11 @@ public class MainServices extends Service implements ServiceInterface {
 
     @Override
     public void onCreate(){
+
         if(this.storage==null) {
             this.storage = new Storage(getApplicationContext());
         }
+
         if(switchPlug==null) {
             this.switchPlug = new SwitchCharger(this.storage.getIP(), this.storage.getPort());
         }
@@ -57,8 +56,8 @@ public class MainServices extends Service implements ServiceInterface {
 
         logging("Service Created, ip: "+switchPlug.getIP()+", getport: "+switchPlug.getPort()+", waktu phone: "+ Waktu.getTimeNow());
 
-        MainWorkerService worker= new MainWorkerService(sleepTime,this.multiplySleep,getBaseContext(),this.switchPlug,this);
-        worker.doMonitor();
+        MainWorkerService worker= new MainWorkerService(sleepTime,getBaseContext(),this);
+        worker.doMonitor(this.switchPlug,this.multiplySleep);
     }
 
 
@@ -93,6 +92,11 @@ public class MainServices extends Service implements ServiceInterface {
         if(this.logging){
             Logging.log(msg);
         }
+    }
+
+    @Override
+    public boolean wifiStatus(String ssid,String switchIP) {
+        return WifiChecker.wifiStatus(ssid,switchIP,getApplicationContext());
     }
 
 
