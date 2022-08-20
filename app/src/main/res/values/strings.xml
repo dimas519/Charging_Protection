@@ -11,16 +11,20 @@
     <string name="titleWidget"> Toogle Switch</string>
     <string name="titleLogging">Logging Setup Page</string>
     <string name="switchLog">Logging Status</string>
-
+    <string name="titleAbout">About</string>
 
     <string name="navHome">Home</string>
     <string name="navLogging">Logging Menu</string>
     <string name="navWifi">Wifi Configuration</string>
     <string name="navAbout">About</string>
 
+    <string name="codeTitle">Version Code : </string>
+    <string name="nameTitle">Version Name : </string>
+
 
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">This is an app widget description</string>
+
 
 
 </resources>

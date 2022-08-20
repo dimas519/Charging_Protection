@@ -3,15 +3,17 @@ plugins {
 }
 
 android {
-    compileSdk 32
 
+
+
+
+    compileSdk 32
     defaultConfig {
         applicationId "com.dimas519.chargingprotection"
         minSdk 27
         targetSdk 32
-        versionCode 1
-        versionName "1.0"
-
+        versionCode 13
+        versionName "Private-4.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     viewBinding {
@@ -19,6 +21,9 @@ android {
     }
     buildTypes {
         release {
+//            buildConfigField "String", "name", name
+//            buildConfigField "Integer", "code", code
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

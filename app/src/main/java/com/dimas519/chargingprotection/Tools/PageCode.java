@@ -1,6 +1,7 @@
 package com.dimas519.chargingprotection.Tools;
 
 public class PageCode {
+    public static int NUMBER_OF_FRAGMENT=4;
     public static int MainPage=0;
     public static int LoggingMenu=1;
     public static int WifiConfiguration=2;

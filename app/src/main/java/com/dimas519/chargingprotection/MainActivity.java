@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     //0 fragment main
-    private ArrayList<Fragment> fragments;
+    private Fragment[] fragments;
 
 
     @Override
@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         //init fragment
-        this.fragments=new ArrayList<>();
-        this.fragments.add(new MainFragment(0));
+        this.fragments=new Fragment[PageCode.NUMBER_OF_FRAGMENT];
+        this.fragments[PageCode.MainPage]=new MainFragment(0);
 
         //set fragments awal
         this.changePage(PageCode.MainPage);
@@ -59,10 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.navigationView=this.binding.navView;
         this.navigationView.setNavigationItemSelectedListener(this);
 
-
-
-
-
+        this.navigationView.getMenu().getItem(PageCode.MainPage).setChecked(true);
 
 
 
@@ -77,30 +74,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void changePage(int page){
         this.ft=this.fm.beginTransaction();
         this.hideOtherFragments(page);
-        if(this.fragments.get(page).isAdded()) {
-            this.ft.show(this.fragments.get(page));
+        if(this.fragments[page].isAdded()) {
+            this.ft.show(this.fragments[page]);
         }else {
-            this.ft.add(this.binding.fragment.getId(), this.fragments.get(page), null);
+            this.ft.add(this.binding.fragment.getId(), this.fragments[page], null);
         }
         this.ft.commit();
     }
 
     private void hideOtherFragments(int pageToShow){
-        for (int i=0;i<this.fragments.size();i++){
-            if(i!=pageToShow){
-                this.ft.hide(fragments.get(i));
+        for (int i=0;i<this.fragments.length;i++){
+            if(i!=pageToShow && this.fragments[i]!=null){
+                this.ft.hide(fragments[i]);
             }
         }
     }
 
-    private boolean initialized(int page){
-        System.out.println(this.fragments.size()+" : "+page+","+ (this.fragments.size() > page) );
-        if( this.fragments.size() > page &&this.fragments.get(page)!=null){
-            return true;
-        }else{
-            return false;
-        }
-    }
 
 
 
@@ -118,11 +107,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 changePage(PageCode.MainPage);
                 break;
             case R.id.nav_logging:
-                if(!this.initialized(PageCode.LoggingMenu)){
-                    this.fragments.add(new LoggingFragment());
+                if(this.fragments[PageCode.LoggingMenu]==null){
+                    this.fragments[PageCode.LoggingMenu]=new LoggingFragment();
                 }
                 changePage(PageCode.LoggingMenu);
-
+                break;
+            case R.id.nav_about:
+                if(this.fragments[PageCode.WifiConfiguration]==null){
+                    this.fragments[PageCode.WifiConfiguration]=new Fragment_about();
+                }
+                changePage(PageCode.WifiConfiguration);
+                break;
         }
 
 
