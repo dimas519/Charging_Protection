@@ -2,8 +2,6 @@ package com.dimas519.chargingprotection.Presenter;
 
 import android.content.Context;
 
-import com.dimas519.chargingprotection.Storage.Storage;
-
 public class LoggingPresenter extends NetworkPresenter {
 
     public LoggingPresenter(Context context){

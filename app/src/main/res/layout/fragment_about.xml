@@ -14,7 +14,7 @@
         android:text="@string/titleAbout"
         android:textAlignment="center"
         android:textStyle="bold"
-        android:textSize="30dp"/>
+        android:textSize="30sp"/>
 
     <LinearLayout
 
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:text="@string/app_name"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textAlignment="center"
             android:padding="10dp"/>
 
@@ -97,33 +97,29 @@
             android:id="@+id/github_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/title"
             android:layout_margin="20dp"
-
-
             android:background="@android:color/transparent"
             android:src="@drawable/ic_github"
-            app:tint="@color/teal_200"/>
+            app:tint="@color/teal_200"
+            tools:ignore="contentDescription"/>
 
         <ImageButton
             android:id="@+id/linkedin_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-
-
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_linkedin_icon_circle" />
+            android:src="@drawable/ic_linkedin_icon_circle"
+            tools:ignore="contentDescription"/>
 
         <ImageButton
             android:id="@+id/gitlab_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-
-
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_gitlab" />
+            android:src="@drawable/ic_gitlab"
+            tools:ignore="contentDescription"/>
 
     </LinearLayout>
 
@@ -134,19 +130,16 @@
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:gravity="center"
-        android:layout_marginBottom="100dp"
-        >
+        android:layout_marginBottom="100dp">
 
         <ImageButton
             android:id="@+id/instagram_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/title"
             android:layout_margin="20dp"
-
-
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_instagram" />
+            android:src="@drawable/ic_instagram"
+            tools:ignore="contentDescription"/>
 
 
         <ImageButton
@@ -154,10 +147,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-
-
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_facebook_f_logo__2019_" />
+            android:src="@drawable/ic_facebook_f_logo__2019_"
+            tools:ignore="contentDescription"/>
 
     </LinearLayout>
 

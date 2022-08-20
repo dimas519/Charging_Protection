@@ -6,7 +6,7 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 
 import com.dimas519.chargingprotection.Presenter.LoggingPresenter;
-import com.dimas519.chargingprotection.Presenter.WifiPresenter;
+import com.dimas519.chargingprotection.Presenter.WIFIPresenter;
 import com.dimas519.chargingprotection.Presenter.SwitchPresenter;
 import com.dimas519.chargingprotection.SwitchCharger;
 import com.dimas519.chargingprotection.Tools.Notification;
@@ -25,13 +25,8 @@ public class MainServices extends Service implements ServiceInterface {
     //needed
     private SwitchCharger switchPlug;
     private SwitchPresenter switchPresenter;
-    private WifiPresenter wifiPresenter;
+    private WIFIPresenter wifiPresenter;
     private LoggingPresenter loggingPresenter;
-
-
-
-
-
 
 
     public static String getServiceName(){
@@ -53,7 +48,7 @@ public class MainServices extends Service implements ServiceInterface {
         }
 
         if(this.wifiPresenter ==null){
-            this.wifiPresenter =new WifiPresenter(getApplicationContext());
+            this.wifiPresenter =new WIFIPresenter(getApplicationContext());
         }
 
         if(this.loggingPresenter==null){
@@ -72,12 +67,6 @@ public class MainServices extends Service implements ServiceInterface {
         MainWorkerService worker= new MainWorkerService(sleepTime,getBaseContext(),this);
         worker.doMonitor(this.switchPlug,this.multiplySleep,this.wifiPresenter.getSSID());
     }
-
-
-
-
-
-
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {

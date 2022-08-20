@@ -5,13 +5,11 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public class Storage {
-    private SharedPreferences sp;
-
+    private final SharedPreferences sp;
 
     //switch
     private final String switchAddress ="ip";
     private final String switchPort ="port";
-    private final String mac="mac";
 
 
     //logging
@@ -24,6 +22,12 @@ public class Storage {
     private final String WIFI_name="SSID";
     private final String TIMEOUT="TIMEOUT(MS)";
 
+
+    //service  --sleep
+    private final String sleepTimeCharging="sleepTimeCharging";
+    private final String sleepTimeOther="sleepTimeNotCharging";
+    private final String turnOffPercentage="turnOFF";
+    private final String turnOnPercentage="turnON";
 
     public Storage(Context c){
         this. sp= PreferenceManager.getDefaultSharedPreferences(c);
@@ -110,6 +114,50 @@ public class Storage {
 
     public int getTimeOut() {
         return sp.getInt(this.TIMEOUT, 5000);
+    }
+
+    // ---------------------------------------------------------------------
+    // Service -- sleep time
+    //----------------------------------------------------------------------
+
+    public void saveSleepTimeCharging(Long sleepTime){
+        SharedPreferences.Editor editor= this.sp.edit();
+        editor.putLong(this.sleepTimeCharging, sleepTime);
+        editor.apply();
+    }
+
+    public Long getSleepTimeCharging(){
+        return sp.getLong(this.sleepTimeCharging, -1);
+    }
+
+    public void saveSleepTimeOther(Long sleepTime){
+        SharedPreferences.Editor editor= this.sp.edit();
+        editor.putLong(this.sleepTimeOther, sleepTime);
+        editor.apply();
+    }
+
+    public Long getSleepTimeOther(){
+        return sp.getLong(this.sleepTimeOther, -1);
+    }
+
+    public void saveTurnOffPercentage(float percentage){
+        SharedPreferences.Editor editor= this.sp.edit();
+        editor.putFloat(this.turnOffPercentage, percentage);
+        editor.apply();
+    }
+
+    public float getTurnOffPercentage(){
+        return sp.getFloat(this.turnOffPercentage,100);
+    }
+
+    public void saveTurnOnPercentage(float percentage){
+        SharedPreferences.Editor editor= this.sp.edit();
+        editor.putFloat(this.turnOnPercentage, percentage);
+        editor.apply();
+    }
+
+    public float getTurnOnPercentage(){
+        return sp.getFloat(this.turnOnPercentage,15);
     }
 
 }

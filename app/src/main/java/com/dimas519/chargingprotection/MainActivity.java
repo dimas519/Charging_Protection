@@ -1,17 +1,19 @@
 package com.dimas519.chargingprotection;
 
 import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
-import android.view.Gravity;
+
 import android.view.MenuItem;
 import android.view.View;
 
-import com.dimas519.chargingprotection.Presenter.WifiPresenter;
+import com.dimas519.chargingprotection.Presenter.WIFIPresenter;
 import com.dimas519.chargingprotection.Tools.CODE;
 import com.dimas519.chargingprotection.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationView;
@@ -20,10 +22,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ActivityMainBinding binding;
     private FragmentManager fm;
     private FragmentTransaction ft;
-    private NavigationView navigationView;
 
-    private WifiPresenter wifiPresenter;
-
+    private WIFIPresenter wifiPresenter;
 
     //0 fragment main
     private Fragment[] fragments;
@@ -37,12 +37,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.binding =ActivityMainBinding.inflate(getLayoutInflater());
         this.fm=getSupportFragmentManager();
 
-        this.wifiPresenter =new WifiPresenter(getApplicationContext());
-
+        //init presenter
+        this.wifiPresenter =new WIFIPresenter(getApplicationContext());
 
         //init fragment
         this.fragments=new Fragment[CODE.NUMBER_OF_FRAGMENT];
-        this.fragments[CODE.MainPage]=new MainFragment(wifiPresenter);
+        this.fragments[CODE.MainPage]=new MainFragment(this.wifiPresenter);
 
         //set fragments awal
         this.changePage(CODE.MainPage);
@@ -51,15 +51,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.binding.drawerButton.setOnClickListener(this);
 
         //drawer
-        this.navigationView=this.binding.navView;
-        this.navigationView.setNavigationItemSelectedListener(this);
+        NavigationView navigationView=this.binding.navView;
+        navigationView.setNavigationItemSelectedListener(this);
 
-        this.navigationView.getMenu().getItem(CODE.MainPage).setChecked(true);
+        navigationView.getMenu().getItem(CODE.MainPage).setChecked(true);
 
 
 
 //        ft=fm.beginTransaction();
-//        fm.setFragmentResultListener("sebelum",this,this);
+//        fm.setFragmentResultListener("key",this,this);
 
         setContentView(this.binding.getRoot());
     }
@@ -91,36 +91,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if(view==this.binding.drawerButton){
-            this.binding.drawerLayout.openDrawer(Gravity.LEFT);
+            this.binding.drawerLayout.openDrawer(GravityCompat.START);
         }
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int selected=item.getItemId();
         switch (item.getItemId()){
             case R.id.nav_main:
                 changePage(CODE.MainPage);
                 break;
             case R.id.nav_logging:
-                if(this.fragments[CODE.LoggingMenu]==null){
-                    this.fragments[CODE.LoggingMenu]=new LoggingFragment();
+                if(this.fragments[CODE.LoggingMenuPage]==null){
+                    this.fragments[CODE.LoggingMenuPage]=new LoggingFragment();
                 }
-                changePage(CODE.LoggingMenu);
+                changePage(CODE.LoggingMenuPage);
                 break;
             case R.id.nav_about:
-                if(this.fragments[CODE.About]==null){
-                    this.fragments[CODE.About]=new Fragment_about();
+                if(this.fragments[CODE.AboutPage]==null){
+                    this.fragments[CODE.AboutPage]=new Fragment_about();
                 }
-                changePage(CODE.About);
+                changePage(CODE.AboutPage);
                 break;
             case R.id.nav_wifi:
-                if(this.fragments[CODE.WifiConfiguration]==null){
-                    this.fragments[CODE.WifiConfiguration]=new Fragment_Wifi_Configuration(this.wifiPresenter);
+                if(this.fragments[CODE.WifiConfigurationPage]==null){
+                    this.fragments[CODE.WifiConfigurationPage]=new Fragment_Wifi_Configuration(this.wifiPresenter);
                 }
-                changePage(CODE.WifiConfiguration);
+                changePage(CODE.WifiConfigurationPage);
                 break;
+            case R.id.nav_service:
+                if(this.fragments[CODE.ServicePage]==null){
+                    this.fragments[CODE.ServicePage]=new Fragment_Service_Configuration();
+                }
+                changePage(CODE.ServicePage);
         }
-
 
         this.binding.drawerLayout.closeDrawers();
         return true;

@@ -8,15 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.dimas519.chargingprotection.Presenter.WifiPresenter;
+import com.dimas519.chargingprotection.Presenter.WIFIPresenter;
 import com.dimas519.chargingprotection.databinding.FragmentWifiConfigurationBinding;
 
 
 public class Fragment_Wifi_Configuration extends Fragment implements View.OnClickListener {
     private FragmentWifiConfigurationBinding binding;
-    private WifiPresenter presenter;
+    private WIFIPresenter presenter;
 
-    public Fragment_Wifi_Configuration(WifiPresenter presenter){
+    public Fragment_Wifi_Configuration(WIFIPresenter presenter){
         this.presenter=presenter;
     }
 

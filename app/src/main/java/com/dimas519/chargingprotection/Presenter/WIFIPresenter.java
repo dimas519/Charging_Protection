@@ -2,11 +2,10 @@ package com.dimas519.chargingprotection.Presenter;
 
 import android.content.Context;
 
-import com.dimas519.chargingprotection.Storage.Storage;
 
-public class WifiPresenter extends NetworkPresenter{
+public class WIFIPresenter extends NetworkPresenter{
 
-    public WifiPresenter(Context context){
+    public WIFIPresenter(Context context){
         super(context);
     }
 

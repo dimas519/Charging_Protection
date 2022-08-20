@@ -1,17 +1,18 @@
 <resources>
-<!--    multiple fragment-->
+    <!--    multiple fragment-->
     <string name="app_name">Charging Protection</string>
     <string name="save">Save !!!</string>
 
 
-<!--    drawerMenu-->
+    <!--    drawerMenu-->
     <string name="navHome">Home</string>
-    <string name="navLogging">Logging Menu</string>
+    <string name="navService">Service Configuration</string>
+    <string name="navLogging">Logging Configuration</string>
     <string name="navWifi">Wifi Configuration</string>
     <string name="navAbout">About</string>
 
 
-<!--    home fragment-->
+    <!--    home fragment-->
     <string name="state">State</string>
     <string name="etIP">Enter IP Address</string>
     <string name="etPort">Enter Port</string>
@@ -21,26 +22,35 @@
     <string name="titikDua"> : </string>
 
 
-<!--    title fragment-->
+    <!--    title fragment-->
     <string name="titleLogging">Logging Setup Page</string>
     <string name="switchLog">Logging Status</string>
     <string name="titleAbout">About</string>
 
 
-<!--    about me fragment-->
+    <!--    about me fragment-->
     <string name="codeTitle">Version Code : </string>
     <string name="nameTitle">Version Name : </string>
 
 
-<!--    widget-->
+    <!--    widget-->
     <string name="add_widget">Add Widget</string>
     <string name="app_widget_description">Widget to toggle smart switch</string>
 
 
-<!--    wifi Configuration-->
-    <string name="titleConfiguration">WIFI Setup Page</string>
+    <!--    wifi Configuration-->
+    <string name="titleWifiConfiguration">WIFI Setup Page</string>
     <string name="wifiNamePlaceHolder">WIFI Name(SSID)</string>
     <string name="TimeoutConfigurationPlaceholder">Timeout in millisecond</string>
 
+
+
+    <!--    Service Configuration-->
+    <string name="titleServiceConfiguration">Service Setup Page</string>
+    <string name="sleepWhileCharging">Interval Read Level Battery While Charging</string>
+    <string name="sleepOther">Interval Read While not Charging or not Connected to WIFI</string>
+    <string name="titleSliderTurnOff">Turn On/Off At (Percentage)</string>
+    <string name="Minutes">Minutes</string>
+    <string name="Second">Second</string>
 
 </resources>

@@ -18,7 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import com.dimas519.chargingprotection.Presenter.SwitchPresenter;
-import com.dimas519.chargingprotection.Presenter.WifiPresenter;
+import com.dimas519.chargingprotection.Presenter.WIFIPresenter;
 import com.dimas519.chargingprotection.Service.MainServices;
 import com.dimas519.chargingprotection.Service.OneTimeServices;
 import com.dimas519.chargingprotection.Tools.BatteryStatus;
@@ -34,10 +34,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private WorkManager wm;
 
 
-    private WifiPresenter networkPresenter;
+    private WIFIPresenter networkPresenter;
     private SwitchPresenter switchPresenter;
 
-    public MainFragment(WifiPresenter presenter) {
+    public MainFragment(WIFIPresenter presenter) {
         this.networkPresenter =presenter;
     }
 

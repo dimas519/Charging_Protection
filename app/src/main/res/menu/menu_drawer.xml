@@ -7,6 +7,10 @@
             android:id="@+id/nav_main"
             android:icon="@drawable/ic_baseline_home_24"
             android:title="@string/navHome"/>
+        <item
+            android:id="@+id/nav_service"
+            android:icon="@drawable/ic_services"
+            android:title="@string/navService"/>
 
         <item
             android:id="@+id/nav_logging"

@@ -4,19 +4,21 @@ package com.dimas519.chargingprotection.Tools;
 
 public class CODE {
 
+
     // ---------------------------------------------------------------------
     // FRAGMENT CODE
     //----------------------------------------------------------------------
 
-    public static int NUMBER_OF_FRAGMENT=4;
+    public static int NUMBER_OF_FRAGMENT=5;
     public static int MainPage=0;
-    public static int LoggingMenu=1;
-    public static int WifiConfiguration=2;
-    public static int About=3;
+    public static int LoggingMenuPage =1;
+    public static int WifiConfigurationPage =2;
+    public static int AboutPage =3;
+    public static int ServicePage=4;
 
 
     // ---------------------------------------------------------------------
-    // WIDGET CODE
+    // WIDGET CODE && SWITCH CODE
     //----------------------------------------------------------------------
     public static final String ToggleAction ="ACTION_TOGGLE";
     public static final String ChangeStatus="Change_Status";

@@ -19,7 +19,7 @@ public class Logging {
                 }catch (IOException e){
                     //do Something IO exception
                 }catch (Exception e){
-                    
+                    //do Something Exception exception
                 }
             }
         });
