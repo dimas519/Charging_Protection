@@ -1,7 +1,7 @@
 package com.dimas519.chargingprotection.Widget.Thread;
 
 import com.dimas519.chargingprotection.SwitchCharger;
-import com.dimas519.chargingprotection.Widget.WidgetCode;
+import com.dimas519.chargingprotection.Tools.CODE;
 
 public class WidgetThread implements Runnable {
     private OwnHandler handler;
@@ -27,13 +27,13 @@ public class WidgetThread implements Runnable {
         int currentState = switchCharger.getstatus();
         if(action==null){
             if(currentState==-1) {
-                this.handler.messageProcess(WidgetCode.SwitchError);
+                this.handler.messageProcess(CODE.SwitchError);
             }else if(currentState==1){
-                this.handler.messageProcess(WidgetCode.ON);
+                this.handler.messageProcess(CODE.ON);
             }else{
-                this.handler.messageProcess(WidgetCode.OFF);
+                this.handler.messageProcess(CODE.OFF);
             }
-        } else if(action.equals(WidgetCode.ToggleAction)) {
+        } else if(action.equals(CODE.ToggleAction)) {
             this.toogleSwitch(currentState);
         }
 
@@ -43,23 +43,23 @@ public class WidgetThread implements Runnable {
     private void toogleSwitch(int currentState){
         boolean res;
         if(currentState==-1){
-            this.handler.messageProcess(WidgetCode.SwitchError);
+            this.handler.messageProcess(CODE.SwitchError);
         }else if(currentState==1){ //kalau kondisinya nyala
             res=switchCharger.turn_off(); //maka matikan
 
             if(res){ //check berhasil atau tidak
-                this.handler.messageProcess(WidgetCode.SuccessTurnOff);
+                this.handler.messageProcess(CODE.SuccessTurnOff);
             }else{
-                this.handler.messageProcess(WidgetCode.FailedTurnOff);
+                this.handler.messageProcess(CODE.FailedTurnOff);
             }
 
 
         }else{
             res=switchCharger.turn_on();
             if(res){
-                this.handler.messageProcess(WidgetCode.SuccessTurnOn);
+                this.handler.messageProcess(CODE.SuccessTurnOn);
             }else{
-                this.handler.messageProcess(WidgetCode.FailedTurnOn);
+                this.handler.messageProcess(CODE.FailedTurnOn);
             }
         }
     }

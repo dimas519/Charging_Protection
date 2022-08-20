@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.os.IBinder;
 import androidx.annotation.Nullable;
 
-import com.dimas519.chargingprotection.LoggingFragment;
 import com.dimas519.chargingprotection.Presenter.LoggingPresenter;
-import com.dimas519.chargingprotection.Storage.Storage;
+import com.dimas519.chargingprotection.Presenter.WifiPresenter;
+import com.dimas519.chargingprotection.Presenter.SwitchPresenter;
 import com.dimas519.chargingprotection.SwitchCharger;
 import com.dimas519.chargingprotection.Tools.Notification;
 import com.dimas519.chargingprotection.Tools.Waktu;
@@ -24,15 +24,12 @@ public class MainServices extends Service implements ServiceInterface {
 
     //needed
     private SwitchCharger switchPlug;
-    private Storage storage; //need presenter
-
-    //setUpLogging
-    private String ip;
-    private int port=-1;
+    private SwitchPresenter switchPresenter;
+    private WifiPresenter wifiPresenter;
+    private LoggingPresenter loggingPresenter;
 
 
-    //Logging purpose
-    private boolean logging=false;
+
 
 
 
@@ -51,19 +48,21 @@ public class MainServices extends Service implements ServiceInterface {
     @Override
     public void onCreate(){
 
-        if(this.storage==null) {
-            this.storage = new Storage(getApplicationContext());
+        if(this.switchPresenter==null) {
+            this.switchPresenter = new SwitchPresenter(getApplicationContext());
         }
 
-        if(ip==null || port==-1){
-            LoggingPresenter presenter=new LoggingPresenter(getApplicationContext());
-            this.ip=presenter.getIP();
-            this.port=presenter.getPort();
-            this.logging=presenter.getStatus();
+        if(this.wifiPresenter ==null){
+            this.wifiPresenter =new WifiPresenter(getApplicationContext());
         }
+
+        if(this.loggingPresenter==null){
+            this.loggingPresenter=new LoggingPresenter(getApplicationContext());
+        }
+
 
         if(switchPlug==null) {
-            this.switchPlug = new SwitchCharger(this.storage.getIP(), this.storage.getSwitchPort());
+            this.switchPlug = new SwitchCharger(this.switchPresenter.getIP(), this.switchPresenter.getPort(),this.switchPresenter.getTimeout());
         }
 
         int sleepTime=((this.minutesSleep*60)+this.secondSleep)*1000;
@@ -71,7 +70,7 @@ public class MainServices extends Service implements ServiceInterface {
         logging("Service Created, ip: "+switchPlug.getIP()+", getport: "+switchPlug.getPort()+", waktu phone: "+ Waktu.getTimeNow());
 
         MainWorkerService worker= new MainWorkerService(sleepTime,getBaseContext(),this);
-        worker.doMonitor(this.switchPlug,this.multiplySleep);
+        worker.doMonitor(this.switchPlug,this.multiplySleep,this.wifiPresenter.getSSID());
     }
 
 
@@ -103,8 +102,8 @@ public class MainServices extends Service implements ServiceInterface {
 
     @Override
     public void logging(String msg) { //for check logging features enabled /disabled
-        if(this.logging){
-            Logging.log(msg,ip,port);
+        if(this.loggingPresenter.getStatus()){
+            Logging.log(msg,loggingPresenter.getIP(),loggingPresenter.getPort(), loggingPresenter.getTimeout());
         }
     }
 

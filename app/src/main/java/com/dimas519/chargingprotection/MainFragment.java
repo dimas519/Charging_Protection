@@ -17,25 +17,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import com.dimas519.chargingprotection.Presenter.SwitchPresenter;
+import com.dimas519.chargingprotection.Presenter.WifiPresenter;
 import com.dimas519.chargingprotection.Service.MainServices;
 import com.dimas519.chargingprotection.Service.OneTimeServices;
-import com.dimas519.chargingprotection.Storage.Storage;
 import com.dimas519.chargingprotection.Tools.BatteryStatus;
-import com.dimas519.chargingprotection.Widget.WidgetCode;
+import com.dimas519.chargingprotection.Tools.CODE;
+import com.dimas519.chargingprotection.Tools.WifiChecker;
 import com.dimas519.chargingprotection.Widget.Widget_Charging_Protection;
 import com.dimas519.chargingprotection.databinding.FragmentMainBinding;
-
 import java.util.UUID;
 
 
 public class MainFragment extends Fragment implements View.OnClickListener {
     private FragmentMainBinding binding;
     private WorkManager wm;
-    private Storage storage;
-    public int idFragments;
 
-    public MainFragment(int id) {
-        this.idFragments=id;
+
+    private WifiPresenter networkPresenter;
+    private SwitchPresenter switchPresenter;
+
+    public MainFragment(WifiPresenter presenter) {
+        this.networkPresenter =presenter;
     }
 
 
@@ -44,7 +47,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
 
         this.wm= WorkManager.getInstance(getContext());
-        this.storage=new Storage(getContext());
+        this.switchPresenter =new SwitchPresenter(getContext());
 
     }
 
@@ -55,11 +58,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         this.binding=FragmentMainBinding.inflate(inflater);
 
 
-        //set up toogle
-        initCheckSwitchStatus();
-        this.binding.service.setChecked(isServiceRunning(MainServices.getServiceName()));
-
-
         //set up status
         IntentFilter ifilter= new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         Intent battery = getContext().registerReceiver(null, ifilter);
@@ -67,15 +65,20 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         this.binding.state.setText(BatteryStatus.getStatus(status));
 
 
-        //setup text
-        this.binding.ipAdress.setText(this.storage.getIP());
-        this.binding.port.setText(this.storage.getSwitchPort()+"");
+        //setup text view
+        String switchIP=this.switchPresenter.getIP();
+        if(switchIP!=null) {
+            this.binding.ipAdress.setText(switchIP);
+        }
+        this.binding.port.setText(this.switchPresenter.getPort()+"");
 
-
+        //set up toogle
+        initCheckSwitchStatus();
+        this.binding.service.setChecked(isServiceRunning(MainServices.getServiceName()));
 
 
         //onclick Listener
-        this.binding.switch3.setOnClickListener(this);
+        this.binding.switchPlug.setOnClickListener(this);
         this.binding.service.setOnClickListener(this);
         this.binding.save.setOnClickListener(this);
 
@@ -87,17 +90,18 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        if (view==this.binding.switch3){
-            boolean status=this.binding.switch3.isChecked();
-            this.binding.switch3.setChecked(!status);
-            Data data=new Data.Builder()
-                    .putInt("code",2)
-                    .putBoolean("status",!status)
-                    .build();
-            UUID idTask=this.addWork(data);
-            this.observeSwitchCondifition(idTask,true);
+        if (view==this.binding.switchPlug){
+            boolean status=this.binding.switchPlug.isChecked();
+            this.binding.switchPlug.setChecked(!status);
 
-
+            if(this.checkNetwork()) {
+                Data data = new Data.Builder()
+                        .putInt("code", 2)
+                        .putBoolean("status", !status)
+                        .build();
+                UUID idTask = this.addWork(data);
+                this.observeSwitchCondifition(idTask, true);
+            }
 
         }else if(view==this.binding.service){
             if(isServiceRunning(MainServices.getServiceName())){
@@ -114,7 +118,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             String port=this.binding.port.getText().toString();
             this.setDeviceInfo(ip,port);
             this.initCheckSwitchStatus();
-
         }
     }
 
@@ -128,13 +131,31 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         return false;
     }
 
+    private boolean checkNetwork(){
+        String switchIP=this.switchPresenter.getIP();
+
+        if(switchIP!=null){
+            String SSID=this.networkPresenter.getSSID();
+            if(!WifiChecker.wifiStatus(SSID,switchIP,getContext())){
+                return true;
+            }else{
+                Toast.makeText(getContext(), "WIFI Saved MissMatch", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }else{
+            Toast.makeText(getContext(), "Fill Smart Switch IP first", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
 
     private void initCheckSwitchStatus(){
-        Data data=new Data.Builder()
-                .putInt("code",1)
-                .build();
-        UUID idTask=this.addWork(data);
-        this.observeSwitchCondifition(idTask);
+        if(checkNetwork()) {
+            Data data = new Data.Builder()
+                    .putInt("code", 1)
+                    .build();
+            UUID idTask = this.addWork(data);
+            this.observeSwitchCondifition(idTask);
+        }
     }
 
     private void observeSwitchCondifition(UUID idTask){
@@ -150,19 +171,19 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 Data x=o.getOutputData();
 
                 int res=x.getInt("hasil", 2);
-                if(res==WidgetCode.ERROR){
+                if(res== CODE.ERROR){
                     Toast.makeText(getContext(), "TIMEOUT", Toast.LENGTH_SHORT).show();
-                    binding.switch3.setChecked(false);
-                }else if(res==WidgetCode.OFF){
-                    binding.switch3.setChecked(false);
+                    binding.switchPlug.setChecked(false);
+                }else if(res==CODE.OFF){
+                    binding.switchPlug.setChecked(false);
 
-                }else if(res==WidgetCode.ON){
-                    binding.switch3.setChecked(true);
+                }else if(res==CODE.ON){
+                    binding.switchPlug.setChecked(true);
                 }
 
                 if(updateWidget) {
                     Intent intent = new Intent(getContext(), Widget_Charging_Protection.class);
-                    intent.setAction(WidgetCode.ChangeStatus);
+                    intent.setAction(CODE.ChangeStatus);
                     intent.putExtra("status", res);
                     getContext().sendBroadcast(intent);
                 }
@@ -184,8 +205,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         this.binding.ipAdress.setText(ip);
         this.binding.port.setText(port+"");
 
-        this.storage.saveSwitchPort(port);
-        this.storage.saveIP(ip);
+        this.switchPresenter.savePort(port);
+        this.switchPresenter.saveIP(ip);
     }
 
     private void setDeviceInfo(String ip,String port){
@@ -197,7 +218,5 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         super.onResume();
         this.initCheckSwitchStatus();
     }
-
-
 
 }

@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.work.Data;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
-import com.dimas519.chargingprotection.Storage.Storage;
+import com.dimas519.chargingprotection.Presenter.SwitchPresenter;
 import com.dimas519.chargingprotection.SwitchCharger;
 
 
@@ -26,10 +26,9 @@ public class OneTimeServices extends Worker {
         super(context, workerParams);
         this.parameter=workerParams.getInputData();
 
-        Storage storage=new Storage(context);
+        SwitchPresenter switchPresenter=new SwitchPresenter(context);
 
-
-        this.switchCharger=new SwitchCharger(storage.getIP(),storage.getSwitchPort());
+        this.switchCharger=new SwitchCharger(switchPresenter.getIP(),switchPresenter.getPort(),switchPresenter.getTimeout());
     }
 
     @NonNull

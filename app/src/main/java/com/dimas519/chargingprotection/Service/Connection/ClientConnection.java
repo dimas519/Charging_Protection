@@ -9,13 +9,13 @@ public class ClientConnection {
 
     private DatagramSocket clientSocket;
 
-    public ClientConnection( String IPAddress,int port)   {
+    public ClientConnection( String IPAddress, int port, int timeout )   {
         this.port= port;
 
         try {
             this.IPAddress=InetAddress.getByName(IPAddress);
             this.clientSocket=new DatagramSocket();
-            this.clientSocket.setSoTimeout(5000); // 5detik
+            this.clientSocket.setSoTimeout(timeout); // 5detik
         } catch (SocketException e) {
 
         } catch (UnknownHostException e) {

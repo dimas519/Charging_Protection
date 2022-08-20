@@ -6,8 +6,8 @@ import android.content.IntentFilter;
 import android.os.BatteryManager;
 import com.dimas519.chargingprotection.SwitchCharger;
 import com.dimas519.chargingprotection.Tools.BatteryStatus;
+import com.dimas519.chargingprotection.Tools.CODE;
 import com.dimas519.chargingprotection.Tools.Waktu;
-import com.dimas519.chargingprotection.Widget.WidgetCode;
 import com.dimas519.chargingprotection.Widget.Widget_Charging_Protection;
 
 public class MainWorkerService {
@@ -39,22 +39,22 @@ public class MainWorkerService {
         if(error==5){
             this.si.error();
             Intent intent = new Intent(context, Widget_Charging_Protection.class);
-            intent.setAction(WidgetCode.ChangeStatus);
-            intent.putExtra("status", WidgetCode.ERROR);
+            intent.setAction(CODE.ChangeStatus);
+            intent.putExtra("status", CODE.ERROR);
             context.sendBroadcast(intent);
         }
 
 
     }
 
-    public void doMonitor( SwitchCharger switchCharger,int multiply ){
+    public void doMonitor( SwitchCharger switchCharger,int multiply,String ssid ){
         int sleepTimeNotCharging=this.sleepTimeCharging*multiply;
         IntentFilter iFilter=new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
 
         Thread monitorThread= new Thread() {
             public void run() {
                 while (true) {
-                    if (si.wifiStatus("[MY SSID]", switchCharger.getIP())) {
+                    if (si.wifiStatus(ssid, switchCharger.getIP())) {
 
                         battery = context.registerReceiver(null, iFilter);
                         int status = battery.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
@@ -78,8 +78,8 @@ public class MainWorkerService {
                                     error();
                                 } else {
                                     Intent intent = new Intent(context, Widget_Charging_Protection.class);
-                                    intent.setAction(WidgetCode.ChangeStatus);
-                                    intent.putExtra("status", WidgetCode.OFF);
+                                    intent.setAction(CODE.ChangeStatus);
+                                    intent.putExtra("status", CODE.OFF);
                                     context.sendBroadcast(intent);
                                 }
 
@@ -105,14 +105,9 @@ public class MainWorkerService {
                     }
 
                 }
-
-
             }
         };
-
         monitorThread.start();
-
-
     }
 
     private void sleeping(int sleepTime) {

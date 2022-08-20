@@ -12,8 +12,8 @@ android {
         applicationId "com.dimas519.chargingprotection"
         minSdk 27
         targetSdk 32
-        versionCode 14
-        versionName "Private-5.0"
+        versionCode 15
+        versionName "Private-5.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     viewBinding {

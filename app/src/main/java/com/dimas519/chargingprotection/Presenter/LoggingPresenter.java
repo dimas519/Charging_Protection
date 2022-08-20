@@ -4,11 +4,10 @@ import android.content.Context;
 
 import com.dimas519.chargingprotection.Storage.Storage;
 
-public class LoggingPresenter  {
-    private Storage storage;
+public class LoggingPresenter extends NetworkPresenter {
 
     public LoggingPresenter(Context context){
-        this.storage=new Storage(context);
+        super(context);
     }
 
     public void saveIP(String ip){

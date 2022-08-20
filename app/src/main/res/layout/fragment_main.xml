@@ -43,7 +43,7 @@
 
 
         <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switch3"
+            android:id="@+id/switchPlug"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/save"
@@ -55,7 +55,7 @@
             android:id="@+id/service"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/switch3"
+            android:layout_below="@id/switchPlug"
             android:layout_centerHorizontal="true"
             android:text="@string/condService" />
 

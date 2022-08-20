@@ -13,10 +13,10 @@ public class SwitchCharger {
     private int port;
     //public static String mac="6c2990a99373";
 
-    public SwitchCharger(String ip, int port) {
+    public SwitchCharger(String ip, int port,int timeout) {
         this.ip=ip;
         this.port=port;
-        this.con = new ClientConnection(ip,port);
+        this.con = new ClientConnection(ip,port,timeout);
     }
 
     public String getIP(){
