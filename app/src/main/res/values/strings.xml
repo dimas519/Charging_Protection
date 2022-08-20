@@ -1,30 +1,46 @@
 <resources>
+<!--    multiple fragment-->
     <string name="app_name">Charging Protection</string>
-    <string name="state">State</string>
     <string name="save">Save !!!</string>
+
+
+<!--    drawerMenu-->
+    <string name="navHome">Home</string>
+    <string name="navLogging">Logging Menu</string>
+    <string name="navWifi">Wifi Configuration</string>
+    <string name="navAbout">About</string>
+
+
+<!--    home fragment-->
+    <string name="state">State</string>
     <string name="etIP">Enter IP Address</string>
     <string name="etPort">Enter Port</string>
     <string name="condSwitch">Switch Status</string>
     <string name="condService">Service Status</string>
     <string name="condition">Condition</string>
     <string name="titikDua"> : </string>
-    <string name="titleWidget"> Toogle Switch</string>
+
+
+<!--    title fragment-->
     <string name="titleLogging">Logging Setup Page</string>
     <string name="switchLog">Logging Status</string>
     <string name="titleAbout">About</string>
 
-    <string name="navHome">Home</string>
-    <string name="navLogging">Logging Menu</string>
-    <string name="navWifi">Wifi Configuration</string>
-    <string name="navAbout">About</string>
 
+<!--    about me fragment-->
     <string name="codeTitle">Version Code : </string>
     <string name="nameTitle">Version Name : </string>
 
 
+<!--    widget-->
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">This is an app widget description</string>
 
+
+<!--    wifi Configuration-->
+    <string name="titleConfiguration">WIFI Setup Page</string>
+    <string name="wifiNamePlaceHolder">WIFI Name(SSID)</string>
+    <string name="TimeoutConfigurationPlaceholder">Timeout in millisecond</string>
 
 
 </resources>

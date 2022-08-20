@@ -10,14 +10,14 @@
             android:id="@+id/ipAdress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_above="@+id/port"
+            android:layout_centerHorizontal="true"
             android:layout_marginBottom="50dp"
             android:ems="10"
             android:hint="@string/etIP"
-            android:textAlignment="center"
             android:inputType="text"
-            tools:ignore="Autofill"/>
+            android:textAlignment="center"
+            tools:ignore="Autofill" />
 
         <EditText
             android:layout_centerVertical="true"
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/save"
             android:layout_centerHorizontal="true"
-            android:text="@string/condSwitch"/>
+            android:text="@string/condSwitch" />
 
 
         <com.google.android.material.switchmaterial.SwitchMaterial

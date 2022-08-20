@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.dimas519.chargingprotection.Storage.Storage;
 
-public class LoggingPresenter {
+public class LoggingPresenter  {
     private Storage storage;
 
     public LoggingPresenter(Context context){
@@ -35,5 +35,7 @@ public class LoggingPresenter {
     public boolean getStatus(){
         return this.storage.getLoggingStatus();
     }
+
+
 
 }

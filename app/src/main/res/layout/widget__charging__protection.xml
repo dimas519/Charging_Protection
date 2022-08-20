@@ -23,15 +23,13 @@
             android:padding="8dp"
             android:src="@mipmap/battery_logo_round" />
 
-            <TextView
-                android:id="@+id/tvWidget"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/widget_button"
-                android:textAlignment="center"
+        <TextView
+            android:id="@+id/tvWidget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/widget_button"
 
-                android:text="@string/titleWidget"
-                />
+            android:textAlignment="center" />
 
     </RelativeLayout>
 </FrameLayout>

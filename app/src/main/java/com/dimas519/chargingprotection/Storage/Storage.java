@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 public class Storage {
     private SharedPreferences sp;
 
+
     //switch
     private final String switchAddress ="ip";
     private final String switchPort ="port";
@@ -19,9 +20,18 @@ public class Storage {
     private final String loggingStatus="Logging_status";
 
 
+    //wifi conf
+    private final String WIFI_name="SSID";
+    private final String TIMEOUT="TIMEOUT(MS)";
+
+
     public Storage(Context c){
         this. sp= PreferenceManager.getDefaultSharedPreferences(c);
     }
+
+    // ---------------------------------------------------------------------
+    // SWITCH
+    //----------------------------------------------------------------------
 
     public void saveIP(String ip){
         SharedPreferences.Editor editor= this.sp.edit();
@@ -30,7 +40,7 @@ public class Storage {
     }
 
     public String getIP(){
-        return sp.getString(this.switchAddress,"192.168.100.17");
+        return sp.getString(this.switchAddress,null);
     }
 
     public void saveSwitchPort(int switchPort){
@@ -54,7 +64,7 @@ public class Storage {
     }
 
     public String getIPLogging(){
-        return sp.getString(this.loggingAddress,"192.168.100.100");
+        return sp.getString(this.loggingAddress,null);
     }
 
     public void savePortLogging(int switchPort){
@@ -64,7 +74,7 @@ public class Storage {
     }
 
     public int getPortLogging() {
-        return sp.getInt(this.loggingPort, 9161);
+        return sp.getInt(this.loggingPort, -1);
     }
 
 
@@ -78,11 +88,29 @@ public class Storage {
         return sp.getBoolean(this.loggingStatus,false);
     }
 
+    // ---------------------------------------------------------------------
+    // WIFI CONF OR NETWORK CONF
+    //----------------------------------------------------------------------
 
+    public void saveSSID(String SSID){
+        SharedPreferences.Editor editor= this.sp.edit();
+        editor.putString(this.WIFI_name,SSID);
+        editor.apply();
+    }
 
+    public String getSSID(){
+        return sp.getString(this.WIFI_name,null);
+    }
 
+    public void saveTimeout(int timeout){
+        SharedPreferences.Editor editor= this.sp.edit();
+        editor.putInt(this.TIMEOUT, timeout);
+        editor.apply();
+    }
 
-
+    public int getTimeOut() {
+        return sp.getInt(this.TIMEOUT, 5000);
+    }
 
 }
 

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
+import android.net.Network;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.dimas519.chargingprotection.Presenter.NetworkPresenter;
 import com.dimas519.chargingprotection.Tools.PageCode;
 import com.dimas519.chargingprotection.databinding.ActivityMainBinding;
 import com.dimas519.chargingprotection.databinding.FragmentLoggingBinding;
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FragmentManager fm;
     private FragmentTransaction ft;
     private NavigationView navigationView;
-
+    private NetworkPresenter networkPresenter;
 
 
 
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //init-int
         this.binding =ActivityMainBinding.inflate(getLayoutInflater());
         this.fm=getSupportFragmentManager();
+        this.networkPresenter=new NetworkPresenter(getApplicationContext());
 
 
         //init fragment
@@ -113,8 +116,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 changePage(PageCode.LoggingMenu);
                 break;
             case R.id.nav_about:
+                if(this.fragments[PageCode.About]==null){
+                    this.fragments[PageCode.About]=new Fragment_about();
+                }
+                changePage(PageCode.About);
+                break;
+            case R.id.nav_wifi:
                 if(this.fragments[PageCode.WifiConfiguration]==null){
-                    this.fragments[PageCode.WifiConfiguration]=new Fragment_about();
+                    this.fragments[PageCode.WifiConfiguration]=new Fragment_Wifi_Configuration(this.networkPresenter);
                 }
                 changePage(PageCode.WifiConfiguration);
                 break;
