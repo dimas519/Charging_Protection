@@ -58,8 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
 
-//        ft=fm.beginTransaction();
-//        fm.setFragmentResultListener("key",this,this);
+
 
         setContentView(this.binding.getRoot());
     }
@@ -98,33 +97,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int selected=item.getItemId();
-        switch (item.getItemId()){
-            case R.id.nav_main:
-                changePage(CODE.MainPage);
-                break;
-            case R.id.nav_logging:
-                if(this.fragments[CODE.LoggingMenuPage]==null){
-                    this.fragments[CODE.LoggingMenuPage]=new LoggingFragment();
-                }
-                changePage(CODE.LoggingMenuPage);
-                break;
-            case R.id.nav_about:
-                if(this.fragments[CODE.AboutPage]==null){
-                    this.fragments[CODE.AboutPage]=new Fragment_about();
-                }
-                changePage(CODE.AboutPage);
-                break;
-            case R.id.nav_wifi:
-                if(this.fragments[CODE.WifiConfigurationPage]==null){
-                    this.fragments[CODE.WifiConfigurationPage]=new Fragment_Wifi_Configuration(this.wifiPresenter);
-                }
-                changePage(CODE.WifiConfigurationPage);
-                break;
-            case R.id.nav_service:
-                if(this.fragments[CODE.ServicePage]==null){
-                    this.fragments[CODE.ServicePage]=new Fragment_Service_Configuration();
-                }
-                changePage(CODE.ServicePage);
+        if(selected==R.id.nav_main) {
+            changePage(CODE.MainPage);
+        }else if(selected==R.id.nav_logging) {
+            if (this.fragments[CODE.LoggingMenuPage] == null) {
+                this.fragments[CODE.LoggingMenuPage] = new LoggingFragment();
+            }
+            changePage(CODE.LoggingMenuPage);
+        }else if(selected==R.id.nav_about) {
+            if(this.fragments[CODE.AboutPage]==null){
+                this.fragments[CODE.AboutPage]=new Fragment_about();
+            }
+            changePage(CODE.AboutPage);
+        }else if(selected==R.id.nav_wifi) {
+            if(this.fragments[CODE.WifiConfigurationPage]==null){
+                this.fragments[CODE.WifiConfigurationPage]=new Fragment_Wifi_Configuration(this.wifiPresenter);
+            }
+            changePage(CODE.WifiConfigurationPage);
+        }else if(selected==R.id.nav_service) {
+            if(this.fragments[CODE.ServicePage]==null){
+                this.fragments[CODE.ServicePage]=new Fragment_Service_Configuration();
+            }
+            changePage(CODE.ServicePage);
         }
 
         this.binding.drawerLayout.closeDrawers();

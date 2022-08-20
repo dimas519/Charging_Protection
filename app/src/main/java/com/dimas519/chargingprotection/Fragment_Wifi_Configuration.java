@@ -1,7 +1,9 @@
 package com.dimas519.chargingprotection;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,15 +16,15 @@ import com.dimas519.chargingprotection.databinding.FragmentWifiConfigurationBind
 
 public class Fragment_Wifi_Configuration extends Fragment implements View.OnClickListener {
     private FragmentWifiConfigurationBinding binding;
-    private WIFIPresenter presenter;
+    private final WIFIPresenter presenter;
 
     public Fragment_Wifi_Configuration(WIFIPresenter presenter){
         this.presenter=presenter;
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    @SuppressLint("SetTextI18n")
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.binding=FragmentWifiConfigurationBinding.inflate(inflater);
 
@@ -31,8 +33,7 @@ public class Fragment_Wifi_Configuration extends Fragment implements View.OnClic
             this.binding.ssid.setText(ssid);
         }
 
-        int timeout=this.presenter.getTimeout();
-        this.binding.timeout.setText(timeout+"");
+        this.binding.timeout.setText(this.presenter.getTimeout()+"");
 
 
         //onclick listener

@@ -3,6 +3,8 @@ package com.dimas519.chargingprotection;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,13 +27,14 @@ public class Fragment_about extends Fragment implements View.OnClickListener {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         this.binding=FragmentAboutBinding.inflate(inflater);
 
         this.binding.tvAppName.setText(BuildConfig.VERSION_NAME);
-        this.binding.tvAppCode.setText(BuildConfig.VERSION_CODE+"");
+        String versionCode=BuildConfig.VERSION_CODE+"";
+        this.binding.tvAppCode.setText(versionCode);
 
 
         //onclick listener

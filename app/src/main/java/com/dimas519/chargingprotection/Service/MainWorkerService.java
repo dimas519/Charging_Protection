@@ -11,25 +11,15 @@ import com.dimas519.chargingprotection.Tools.Waktu;
 import com.dimas519.chargingprotection.Widget.Widget_Charging_Protection;
 
 public class MainWorkerService {
-    private final String id="CP2";
-    private  int sleepTimeCharging;
+    private final Context context;
 
-
-
-    private Context context;
     private Intent battery;
-
-
-
-    private ServiceInterface si;
-
+    private final ServiceInterface si;
     private int error;
-    private int levelCharge=100; //for setUp how many
 
-    public MainWorkerService(int sleepTime, Context context, ServiceInterface si){
-        this.sleepTimeCharging=sleepTime;
+
+    public MainWorkerService(Context context, ServiceInterface si){
         this.context=context;
-
         this.error=0;
         this.si=si;
     }
@@ -43,78 +33,69 @@ public class MainWorkerService {
             intent.putExtra("status", CODE.ERROR);
             context.sendBroadcast(intent);
         }
-
-
     }
 
-    public void doMonitor( SwitchCharger switchCharger,int multiply,String ssid ){
-        int sleepTimeNotCharging=this.sleepTimeCharging*multiply;
+    public void doMonitor( SwitchCharger switchCharger,long sleepTimeCharging,long sleepTimeOther, int levelCharge,String ssid ){
         IntentFilter iFilter=new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Thread monitorThread= new Thread(() -> {
+            while (true) {
+                if (si.wifiStatus(ssid, switchCharger.getIP())) {
 
-        Thread monitorThread= new Thread() {
-            public void run() {
-                while (true) {
-                    if (si.wifiStatus(ssid, switchCharger.getIP())) {
+                    battery = context.registerReceiver(null, iFilter);
+                    int status = battery.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
 
-                        battery = context.registerReceiver(null, iFilter);
-                        int status = battery.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-
-                        boolean isCharging = (status == BatteryManager.BATTERY_STATUS_CHARGING);
-                        boolean isFull = (status == BatteryManager.BATTERY_STATUS_FULL);
+                    boolean isCharging = (status == BatteryManager.BATTERY_STATUS_CHARGING);
+                    boolean isFull = (status == BatteryManager.BATTERY_STATUS_FULL);
 
 
-                        int level = battery.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+                    int level = battery.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
 
 
-                        if (isCharging || isFull) {
+                    if (isCharging || isFull) {
 
 
-                            if (level == levelCharge) { //level charge
+                        if(level == levelCharge) { //level charge
 
-                                boolean result = switchCharger.turn_off();
-                                si.logging(BatteryStatus.getStatus(status) + "level:100, result: " + result + ", waktu phone: " + Waktu.getTimeNow() +
-                                        ", ip: " + switchCharger.getIP() + ", getport: " + switchCharger.getPort());
-                                if (!result) {
-                                    error();
-                                } else {
-                                    Intent intent = new Intent(context, Widget_Charging_Protection.class);
-                                    intent.setAction(CODE.ChangeStatus);
-                                    intent.putExtra("status", CODE.OFF);
-                                    context.sendBroadcast(intent);
-                                }
-
-
-                                sleeping(sleepTimeCharging);
-
-                            } else { //not enough percentage
-                                si.logging("state:" + BatteryStatus.getStatus(status) + ", level:" + level + ", waktu phone: " + Waktu.getTimeNow() +
-                                        ", ip: " + switchCharger.getIP() + ", getport: " + switchCharger.getPort());
-                                sleeping(sleepTimeCharging);
+                            boolean result = switchCharger.turn_off();
+                            si.logging(BatteryStatus.getStatus(status) + "level:100, result: " + result + ", waktu phone: " + Waktu.getTimeNow() +
+                                    ", ip: " + switchCharger.getIP() + ", getport: " + switchCharger.getPort());
+                            if (!result) {
+                                error();
+                            } else {
+                                Intent intent = new Intent(context, Widget_Charging_Protection.class);
+                                intent.setAction(CODE.ChangeStatus);
+                                intent.putExtra("status", CODE.OFF);
+                                context.sendBroadcast(intent);
                             }
 
 
-                        } else { //not charge
-                            si.logging("not Charging " + level + ", waktu phone: " + Waktu.getTimeNow() +
+                        } else { //not enough percentage
+                            si.logging("state:" + BatteryStatus.getStatus(status) + ", level:" + level + ", waktu phone: " + Waktu.getTimeNow() +
                                     ", ip: " + switchCharger.getIP() + ", getport: " + switchCharger.getPort());
-                            sleeping(sleepTimeNotCharging);
                         }
+                        sleeping(sleepTimeCharging);
 
 
-                    } else {
-                        sleeping(sleepTimeNotCharging);
+                    } else { //not charge
+                        si.logging("not Charging " + level + ", waktu phone: " + Waktu.getTimeNow() +
+                                ", ip: " + switchCharger.getIP() + ", getport: " + switchCharger.getPort());
+                        sleeping(sleepTimeOther);
                     }
 
+
+                } else { //not same ssid
+                    sleeping(sleepTimeOther);
                 }
             }
-        };
+        });
         monitorThread.start();
     }
 
-    private void sleeping(int sleepTime) {
+    private void sleeping(long sleepTime) {
         try {
             Thread.sleep(sleepTime);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            //do nothing because nothing can do
         }
     }
 

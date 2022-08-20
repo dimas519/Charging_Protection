@@ -1,12 +1,14 @@
 package com.dimas519.chargingprotection.Presenter;
 
 import android.content.Context;
+import com.dimas519.chargingprotection.Storage.Storage;
 
 import java.util.List;
 
-public class ServicePresenter extends SwitchPresenter{
+public class ServicePresenter{
+    private final Storage storage;
     public ServicePresenter(Context context) {
-        super(context);
+        this.storage=new Storage(context);
     }
 
     public void setSleepTimeCharging(Long sleepTime){
@@ -18,7 +20,6 @@ public class ServicePresenter extends SwitchPresenter{
     }
 
     public void setPercentage(List<Float> sliderValue){
-
         if(sliderValue.get(0) >sliderValue.get(1)){
             this.storage.saveTurnOffPercentage(sliderValue.get(0));
             this.storage.saveTurnOnPercentage(sliderValue.get(1));

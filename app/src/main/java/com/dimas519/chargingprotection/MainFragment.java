@@ -1,11 +1,15 @@
 package com.dimas519.chargingprotection;
 
 import static android.content.Context.ACTIVITY_SERVICE;
+
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -34,7 +38,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private WorkManager wm;
 
 
-    private WIFIPresenter networkPresenter;
+    private final WIFIPresenter networkPresenter;
     private SwitchPresenter switchPresenter;
 
     public MainFragment(WIFIPresenter presenter) {
@@ -46,13 +50,14 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.wm= WorkManager.getInstance(getContext());
+        this.wm= WorkManager.getInstance(requireContext());
         this.switchPresenter =new SwitchPresenter(getContext());
 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    @SuppressLint("SetTextI18n")
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //init binding
         this.binding=FragmentMainBinding.inflate(inflater);
@@ -60,7 +65,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         //set up status
         IntentFilter ifilter= new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        Intent battery = getContext().registerReceiver(null, ifilter);
+        Intent battery = requireContext().registerReceiver(null, ifilter);
         int status = battery.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
         this.binding.state.setText(BatteryStatus.getStatus(status));
 
@@ -105,10 +110,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         }else if(view==this.binding.service){
             if(isServiceRunning(MainServices.getServiceName())){
-                getContext().stopService(new Intent( getContext(),MainServices.class ));
+                requireContext().stopService(new Intent( getContext(),MainServices.class ));
                 Toast.makeText(getContext(), "Service Stopped", Toast.LENGTH_LONG).show();
             }else{
-                getContext().startService(new Intent( getContext(), MainServices.class ));
+                requireContext().startService(new Intent( getContext(), MainServices.class ));
                 Toast.makeText(getContext(), "Service Started", Toast.LENGTH_SHORT).show();
             }
 
@@ -121,8 +126,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+
     private  boolean isServiceRunning(String serviceName) {
-        ActivityManager manager = (ActivityManager) getActivity().getSystemService(ACTIVITY_SERVICE);
+        ActivityManager manager = (ActivityManager) requireActivity().getSystemService(ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(100)) {
             if (serviceName.equals(service.service.getClassName())) {
                 return true;
@@ -136,14 +142,14 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         if(switchIP!=null){
             String SSID=this.networkPresenter.getSSID();
-            if(!WifiChecker.wifiStatus(SSID,switchIP,getContext())){
+            if(!WifiChecker.wifiStatus(SSID,switchIP,requireContext())){
                 return true;
             }else{
-                Toast.makeText(getContext(), "WIFI Saved MissMatch", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), "WIFI Saved MissMatch", Toast.LENGTH_SHORT).show();
                 return false;
             }
         }else{
-            Toast.makeText(getContext(), "Fill Smart Switch IP first", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Fill Smart Switch IP first", Toast.LENGTH_SHORT).show();
             return false;
         }
     }
@@ -185,7 +191,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     Intent intent = new Intent(getContext(), Widget_Charging_Protection.class);
                     intent.setAction(CODE.ChangeStatus);
                     intent.putExtra("status", res);
-                    getContext().sendBroadcast(intent);
+                    requireContext().sendBroadcast(intent);
                 }
 
             }
@@ -201,7 +207,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         return task.getId();
     }
 
-    private void setDeviceInfo(String ip,int port){
+    @SuppressLint("SetTextI18n")
+    private void setDeviceInfo(String ip, int port){
         this.binding.ipAdress.setText(ip);
         this.binding.port.setText(port+"");
 

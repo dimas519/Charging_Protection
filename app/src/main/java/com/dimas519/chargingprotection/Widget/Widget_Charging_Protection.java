@@ -58,7 +58,7 @@ public class Widget_Charging_Protection extends AppWidgetProvider implements Wid
             OwnHandler ownHandler =new OwnHandler(context,this);
             WidgetThread widgetThread=new WidgetThread(ownHandler, switchCharger);
             if(action.equals(CODE.ToggleAction)) {
-                widgetThread.setAction(CODE.ToggleAction);;
+                widgetThread.setAction(CODE.ToggleAction);
             }
             Thread otherThread=new Thread(widgetThread);
             otherThread.start();

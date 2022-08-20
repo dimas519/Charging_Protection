@@ -20,7 +20,7 @@ import com.dimas519.chargingprotection.SwitchCharger;
 
 public class OneTimeServices extends Worker {
     Data parameter;
-    private SwitchCharger switchCharger;
+    private final SwitchCharger switchCharger;
 
     public OneTimeServices(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);

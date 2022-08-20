@@ -1,7 +1,9 @@
 package com.dimas519.chargingprotection;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -17,9 +19,9 @@ public class LoggingFragment extends Fragment implements View.OnClickListener {
     private LoggingPresenter presenter;
 
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    @SuppressLint("SetTextI18n")
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.binding=FragmentLoggingBinding.inflate(inflater);
         this.presenter=new LoggingPresenter(getContext()); //init disini karena presenter tidak dibutuhkan ditempat lain;

@@ -2,7 +2,6 @@ package com.dimas519.chargingprotection.Tools;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import androidx.core.app.NotificationCompat;
@@ -12,15 +11,13 @@ import java.util.ArrayList;
 
 public class Notification {
     private static NotificationManager notificationManager;
-    private static ArrayList<String> id=new ArrayList<>();
+    private final static ArrayList<String> id=new ArrayList<String>();
 
     public static void showNotification(Context context, String channelId, String title, String content,boolean onGoing) {
         int id=getId(channelId);
 
         Intent intent=new Intent(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        PendingIntent  pi=PendingIntent.getActivity(context,0,intent,PendingIntent.FLAG_ONE_SHOT);
 
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,channelId)
@@ -41,6 +38,7 @@ public class Notification {
     public static void showNotification(Context context, String channelId ,String title , String content) {
         showNotification(context, channelId,title,content,false);
     }
+
 
     public static void clearNotification(String channelId){
         int id=getId(channelId);
