@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.dimas519.chargingprotection.Presenter.WIFIPresenter;
+import com.dimas519.chargingprotection.Service.MainServices;
+import com.dimas519.chargingprotection.Tools.ServiceHelper;
 import com.dimas519.chargingprotection.databinding.FragmentWifiConfigurationBinding;
 
 
@@ -55,6 +57,13 @@ public class Fragment_Wifi_Configuration extends Fragment implements View.OnClic
                 Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
                 this.presenter.saveSSID(ssid);
                 this.presenter.saveTimeout(timeout);
+                ServiceHelper.restartService(requireContext(), MainServices.getServiceName(),MainServices.class);
+
+
+
+
+
+
             }
 
 

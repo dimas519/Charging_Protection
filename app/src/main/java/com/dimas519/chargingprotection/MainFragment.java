@@ -1,9 +1,8 @@
 package com.dimas519.chargingprotection;
 
-import static android.content.Context.ACTIVITY_SERVICE;
+
 
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
@@ -27,6 +26,7 @@ import com.dimas519.chargingprotection.Service.MainServices;
 import com.dimas519.chargingprotection.Service.OneTimeServices;
 import com.dimas519.chargingprotection.Tools.BatteryStatus;
 import com.dimas519.chargingprotection.Tools.CODE;
+import com.dimas519.chargingprotection.Tools.ServiceHelper;
 import com.dimas519.chargingprotection.Tools.WifiChecker;
 import com.dimas519.chargingprotection.Widget.Widget_Charging_Protection;
 import com.dimas519.chargingprotection.databinding.FragmentMainBinding;
@@ -79,7 +79,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         //set up toogle
         initCheckSwitchStatus();
-        this.binding.service.setChecked(isServiceRunning(MainServices.getServiceName()));
+        this.binding.service.setChecked(ServiceHelper.isServiceRunning(requireContext(),MainServices.getServiceName()));
 
 
         //onclick Listener
@@ -109,15 +109,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             }
 
         }else if(view==this.binding.service){
-            if(isServiceRunning(MainServices.getServiceName())){
-                requireContext().stopService(new Intent( getContext(),MainServices.class ));
-                Toast.makeText(getContext(), "Service Stopped", Toast.LENGTH_LONG).show();
-            }else{
-                requireContext().startService(new Intent( getContext(), MainServices.class ));
-                Toast.makeText(getContext(), "Service Started", Toast.LENGTH_SHORT).show();
-            }
+            ServiceHelper.toggleService(requireContext(),MainServices.getServiceName(),MainServices.class);
 
-            this.binding.service.setChecked(isServiceRunning(MainServices.getServiceName()));
+            this.binding.service.setChecked(ServiceHelper.isServiceRunning(requireContext(),MainServices.getServiceName()));
         }else if(view ==this.binding.save){
             String ip=this.binding.ipAdress.getText().toString();
             String port=this.binding.port.getText().toString();
@@ -127,22 +121,13 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    private  boolean isServiceRunning(String serviceName) {
-        ActivityManager manager = (ActivityManager) requireActivity().getSystemService(ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(100)) {
-            if (serviceName.equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     private boolean checkNetwork(){
         String switchIP=this.switchPresenter.getIP();
 
         if(switchIP!=null){
             String SSID=this.networkPresenter.getSSID();
-            if(!WifiChecker.wifiStatus(SSID,switchIP,requireContext())){
+            if(WifiChecker.wifiStatus(SSID,switchIP,requireContext())){
                 return true;
             }else{
                 Toast.makeText(requireContext(), "WIFI Saved MissMatch", Toast.LENGTH_SHORT).show();
@@ -171,30 +156,27 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private void observeSwitchCondifition(UUID idTask, boolean updateWidget){
 
         LiveData x=this.wm.getWorkInfoByIdLiveData(idTask);
-        x.observe(getViewLifecycleOwner(), new Observer<WorkInfo>() {
-            @Override
-            public void onChanged(WorkInfo o) {
-                Data x=o.getOutputData();
+        x.observe(getViewLifecycleOwner(), (Observer<WorkInfo>) o -> {
+            Data x1 =o.getOutputData();
 
-                int res=x.getInt("hasil", 2);
-                if(res== CODE.ERROR){
-                    Toast.makeText(getContext(), "TIMEOUT", Toast.LENGTH_SHORT).show();
-                    binding.switchPlug.setChecked(false);
-                }else if(res==CODE.OFF){
-                    binding.switchPlug.setChecked(false);
+            int res= x1.getInt("hasil", 2);
+            if(res== CODE.ERROR){
+                Toast.makeText(getContext(), "TIMEOUT", Toast.LENGTH_SHORT).show();
+                binding.switchPlug.setChecked(false);
+            }else if(res==CODE.OFF){
+                binding.switchPlug.setChecked(false);
 
-                }else if(res==CODE.ON){
-                    binding.switchPlug.setChecked(true);
-                }
-
-                if(updateWidget) {
-                    Intent intent = new Intent(getContext(), Widget_Charging_Protection.class);
-                    intent.setAction(CODE.ChangeStatus);
-                    intent.putExtra("status", res);
-                    requireContext().sendBroadcast(intent);
-                }
-
+            }else if(res==CODE.ON){
+                binding.switchPlug.setChecked(true);
             }
+
+            if(updateWidget) {
+                Intent intent = new Intent(getContext(), Widget_Charging_Protection.class);
+                intent.setAction(CODE.ChangeStatus);
+                intent.putExtra("status", res);
+                requireContext().sendBroadcast(intent);
+            }
+
         });
     }
 

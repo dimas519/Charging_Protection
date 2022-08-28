@@ -3,6 +3,8 @@ package com.dimas519.chargingprotection.Service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 
 import com.dimas519.chargingprotection.Presenter.LoggingPresenter;
@@ -19,10 +21,10 @@ public class MainServices extends Service implements ServiceInterface {
     private final static String serviceName="com.dimas519.chargingprotection.Service.MainServices";
 
     //needed
-    private SwitchCharger switchPlug;
     private SwitchPresenter switchPresenter;
     private LoggingPresenter loggingPresenter;
-
+    private WIFIPresenter wifiPresenter;
+    private ServicePresenter servicePresenter;
 
     public static String getServiceName(){
         return serviceName;
@@ -46,32 +48,32 @@ public class MainServices extends Service implements ServiceInterface {
             this.loggingPresenter=new LoggingPresenter(getApplicationContext());
         }
 
-        WIFIPresenter wifiPresenter=new WIFIPresenter(getApplicationContext());
-        ServicePresenter servicePresenter=new ServicePresenter(getApplicationContext());
 
-        if(switchPlug==null) {
-            this.switchPlug = new SwitchCharger(
-                    this.switchPresenter.getIP(),
-                    this.switchPresenter.getPort(),
-                    this.switchPresenter.getTimeout());
-        }
+        this.wifiPresenter=new WIFIPresenter(getApplicationContext());
+        this.servicePresenter=new ServicePresenter(getApplicationContext());
 
 
 
-        logging("Service Created, ip: "+switchPlug.getIP()+ ", getport: "+switchPlug.getPort()+", waktu phone: "+ Waktu.getTimeNow());
 
-        MainWorkerService worker= new MainWorkerService(getBaseContext(),this);
-        int turnOffPercentage=servicePresenter.getPercentage()[0].intValue();
-        long sleepTimeCharging=servicePresenter.getSleepTimeCharging()*1000;
-        long sleepTimeOther=servicePresenter.getSleepTimeOther()*1000;
-        worker.doMonitor(this.switchPlug, sleepTimeCharging, sleepTimeOther, turnOffPercentage, wifiPresenter.getSSID());
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
 
-        logging("Service started, ip: "+switchPlug.getIP()+", getport: "+switchPlug.getPort()+", waktu phone: "+ Waktu.getTimeNow());
+        MainServiceThread worker= new MainServiceThread(getBaseContext(),this);
+
+        Thread serviceThread=new Thread(worker);
+        serviceThread.start();
+
+
+
+
+
+
+
+
+
         return START_STICKY;
     }
 
@@ -91,16 +93,61 @@ public class MainServices extends Service implements ServiceInterface {
     @Override
     public void logging(String msg) { //for check logging features enabled /disabled
         if(this.loggingPresenter.getStatus()){
-            Logging.log(msg,
-                    loggingPresenter.getIP(),
-                    loggingPresenter.getPort(),
-                    loggingPresenter.getTimeout());
+            if(loggingPresenter.getIP()!=null) {
+                Logging.log(msg,
+                        loggingPresenter.getIP(),
+                        loggingPresenter.getPort(),
+                        loggingPresenter.getTimeout());
+            }else{
+                Notification.showNotification(getApplicationContext(),this.id,"Charging Protection","Set UP logging before logging");
+            }
         }
     }
 
     @Override
     public boolean wifiStatus(String ssid,String switchIP) {
         return WifiChecker.wifiStatus(ssid,switchIP,getApplicationContext());
+    }
+
+    @Override
+    public SwitchCharger getSwitchCharger() {
+        return new SwitchCharger(this.switchPresenter.getIP(),switchPresenter.getPort(),switchPresenter.getTimeout());
+
+    }
+
+    @Override
+    public String getSSID() {
+        return this.wifiPresenter.getSSID();
+    }
+
+    @Override
+    public int getLevelOff() {
+        return this.servicePresenter.getOffPercentage();
+    }
+
+    @Override
+    public int getLevelOn() {
+        return this.servicePresenter.getONPercentage();
+    }
+
+    @Override
+    public long getSleepCharging() {
+        return this.servicePresenter.getSleepTimeCharging()*1000;
+    }
+
+    @Override
+    public long getSleepOther() {
+        return this.servicePresenter.getSleepTimeOther()*1000;
+    }
+
+    @Override
+    public boolean getTurnOffService() {
+        return this.servicePresenter.getTurnOffStatus();
+    }
+
+    @Override
+    public boolean getTurnOnService() {
+        return this.servicePresenter.getTurnOnStatus();
     }
 
 

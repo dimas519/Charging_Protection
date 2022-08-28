@@ -1,6 +1,8 @@
 package com.dimas519.chargingprotection.Presenter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.dimas519.chargingprotection.Storage.Storage;
 
 import java.util.List;
@@ -43,8 +45,32 @@ public class ServicePresenter{
         float on= this.storage.getTurnOnPercentage();
 
         return new Float[]{on,off};
-
-
     }
+
+    public int getOffPercentage(){
+            return (int)this.storage.getTurnOffPercentage();
+    }
+
+    public int getONPercentage(){
+        return (int)this.storage.getTurnOnPercentage();
+    }
+
+    public void setTurnOnStatus(boolean status){
+        this.storage.saveTurnOnStatus(status);
+    }
+
+    public boolean getTurnOnStatus(){
+        return this.storage.getTurnOnStatus();
+    }
+
+    public void setTurnOffStatus(boolean status){
+        this.storage.saveTurnOffStatus(status);
+    }
+
+    public boolean getTurnOffStatus(){
+        return this.storage.getTurnOffStatus();
+    }
+
+
 
 }

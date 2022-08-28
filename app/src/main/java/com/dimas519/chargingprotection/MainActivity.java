@@ -3,11 +3,15 @@ package com.dimas519.chargingprotection;
 import androidx.annotation.NonNull;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.view.MenuItem;
@@ -56,11 +60,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         navigationView.getMenu().getItem(CODE.MainPage).setChecked(true);
 
-
-
+        this.checkAndPopUpPermission();
 
 
         setContentView(this.binding.getRoot());
+    }
+
+    private boolean checkPermissionForExternalStorage(String manifestPermission){
+        int result = ContextCompat.checkSelfPermission(getApplicationContext(), manifestPermission);
+        if (result == PackageManager.PERMISSION_GRANTED){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void checkAndPopUpPermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            String[] allPermission=new String[]{
+                    Manifest.permission.INTERNET,
+                    Manifest.permission.ACCESS_WIFI_STATE,
+                    Manifest.permission.ACCESS_NETWORK_STATE,
+                    Manifest.permission.CHANGE_WIFI_STATE,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION};
+
+            String[] notGranted=new String[allPermission.length];
+            int i=0;
+            for(String permission : allPermission){
+                if(!this.checkPermissionForExternalStorage(permission)){
+                    notGranted[i]=permission;
+                    i++;
+                }
+            }
+
+            requestPermissions(notGranted,1);
+        }
     }
 
 
@@ -124,4 +159,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.binding.drawerLayout.closeDrawers();
         return true;
     }
+
 }

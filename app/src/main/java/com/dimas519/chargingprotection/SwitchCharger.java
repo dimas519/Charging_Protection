@@ -2,6 +2,7 @@ package com.dimas519.chargingprotection;
 
 
 import com.dimas519.chargingprotection.Service.Connection.ClientConnection;
+import com.dimas519.chargingprotection.Tools.CODE;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -107,9 +108,9 @@ public class SwitchCharger {
         Map result=getDevicesInfo();
         if(result!=null) {
 
-            return (boolean)result.get("state")? 1:0;
+            return (boolean)result.get("state")? CODE.ON :CODE.OFF;
         }else{
-            return -1;
+            return CODE.ERROR;
         }
     }
 }

@@ -26,8 +26,10 @@ public class Storage {
     //service  --sleep
     private final String sleepTimeCharging="sleepTimeCharging";
     private final String sleepTimeOther="sleepTimeNotCharging";
-    private final String turnOffPercentage="turnOFF";
-    private final String turnOnPercentage="turnON";
+    private final String turnOffPercentage="turnOFFPercentage";
+    private final String turnOnPercentage="turnONPercentage";
+    private final String turnOffStatus="turnOffStatus";
+    private final String turnOnStatus="turnOnStatus";
 
     public Storage(Context c){
         this. sp= PreferenceManager.getDefaultSharedPreferences(c);
@@ -158,6 +160,26 @@ public class Storage {
 
     public float getTurnOnPercentage(){
         return sp.getFloat(this.turnOnPercentage,15);
+    }
+
+    public void saveTurnOffStatus(boolean status){
+        SharedPreferences.Editor editor= this.sp.edit();
+        editor.putBoolean(this.turnOffStatus, status);
+        editor.apply();
+    }
+
+    public boolean getTurnOffStatus(){
+        return sp.getBoolean(this.turnOffStatus,false);
+    }
+
+    public void saveTurnOnStatus(boolean status){
+        SharedPreferences.Editor editor= this.sp.edit();
+        editor.putBoolean(this.turnOnStatus, status);
+        editor.apply();
+    }
+
+    public boolean getTurnOnStatus(){
+        return sp.getBoolean(this.turnOnStatus,false);
     }
 
 }

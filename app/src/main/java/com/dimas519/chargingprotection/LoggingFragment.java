@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.dimas519.chargingprotection.Presenter.LoggingPresenter;
+import com.dimas519.chargingprotection.Service.MainServices;
+import com.dimas519.chargingprotection.Tools.ServiceHelper;
 import com.dimas519.chargingprotection.databinding.FragmentLoggingBinding;
 
 public class LoggingFragment extends Fragment implements View.OnClickListener {
@@ -51,6 +53,7 @@ public class LoggingFragment extends Fragment implements View.OnClickListener {
             this.presenter.saveStatus(status);
 
             Toast.makeText(getContext(), "Logging Saved", Toast.LENGTH_SHORT).show();
+            ServiceHelper.restartService(requireContext(), MainServices.getServiceName(),MainServices.class);
         }
     }
 }

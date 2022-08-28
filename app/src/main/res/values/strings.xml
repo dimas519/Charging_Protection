@@ -52,5 +52,7 @@
     <string name="titleSliderTurnOff">Turn On/Off At (Percentage)</string>
     <string name="Minutes">Minutes</string>
     <string name="Second">Second</string>
+    <string name="sliderTurnOff"> Service Off Status</string>
+    <string name="sliderTurnOn"> Service On Status</string>
 
 </resources>
